@@ -54,6 +54,21 @@ public class Stock {
         return dividendYield;
     }
 
+    @Override
+    public String toString() {
+        return "Stock{" +
+                "ticker='" + ticker + '\'' +
+                ", name='" + name + '\'' +
+                ", sector='" + sector + '\'' +
+                ", price=" + price +
+                ", currency='" + currency + '\'' +
+                ", rating='" + rating + '\'' +
+                ", dividendYield=" + dividendYield +
+                ", market='" + market + '\'' +
+                ", lastUpdated=" + lastUpdated +
+                '}';
+    }
+
     public String getMarket() {
         return market;
     }

@@ -21,7 +21,7 @@ public class StockMarketRepository implements IStockMarketRepository{
 
         try {
             Scanner reader = new Scanner(file);
-            String line;
+            String line = reader.nextLine();
             while (reader.hasNextLine()){
                 line = reader.nextLine();
                 String[] lines = line.split(";");

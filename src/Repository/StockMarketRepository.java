@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class StockMarketRepository implements IStockMarketRepository{
+public class StockMarketRepository implements IStockMarketRepository {
 
 
     @Override
@@ -22,22 +22,22 @@ public class StockMarketRepository implements IStockMarketRepository{
         try {
             Scanner reader = new Scanner(file);
             String line = reader.nextLine();
-            while (reader.hasNextLine()){
+            while (reader.hasNextLine()) {
                 line = reader.nextLine();
                 String[] lines = line.split(";");
 
 
                 String[] line3 = lines[3].split(",");
                 String tal;
-                if (line3.length == 2){
-                    tal = line3[0] +"."+line3[1];
+                if (line3.length == 2) {
+                    tal = line3[0] + "." + line3[1];
                 } else {
                     tal = line3[0];
                 }
                 double price = Double.parseDouble(tal);
                 String[] line6 = lines[6].split(",");
                 String dy;
-                if (line6.length == 2){
+                if (line6.length == 2) {
                     dy = line6[0] + "." + line6[1];
                 } else {
                     dy = line6[0];
@@ -50,7 +50,7 @@ public class StockMarketRepository implements IStockMarketRepository{
                 stocks.add(stock);
             }
             reader.close();
-        }catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         return stocks;

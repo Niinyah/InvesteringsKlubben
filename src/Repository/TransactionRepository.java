@@ -41,7 +41,7 @@ public class TransactionRepository implements iTransactionRepository {
     public void writeTransactionLine(TransactionLine line){
         try {
             File file = new File("src/Data/transactions.csv");
-            FileWriter outFile = new FileWriter(file);
+            FileWriter outFile = new FileWriter(file, true);
             //String split = ";";
             outFile.write(line.getId() + ";" + line.getUser_id() + ";" +
                     line.getDate() + ";" + line.getTicker() + ";" + line.getPrice()

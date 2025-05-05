@@ -46,6 +46,16 @@ public class TransactionRepository implements iTransactionRepository {
             outFile.write(line.getId() + ";" + line.getUser_id() + ";" +
                     line.getDate() + ";" + line.getTicker() + ";" + line.getPrice()
                     + ";" + line.getCurrency() + ";" + line.getOrderType() + ";" + line.getOrderType());
+            /*
+        Path path = Paths.get("src/Data/transactions.csv");
+            try {BufferedWriter writer = Files.newBufferedWriter(
+                                            path, StandardOpenOption.APPEND);
+                writer.write(line.getId() + ";" + line.getUser_id() + ";" +
+                line.getDate() + ";" + line.getTicker() + ";" + line.getPrice()
+                + ";" + line.getCurrency() + ";" + line.getOrderType() + ";" + line.getOrderType());
+
+
+             */
         } catch (IOException e) {
             System.out.println("File not found");
         }

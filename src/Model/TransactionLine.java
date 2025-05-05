@@ -5,14 +5,14 @@ import java.time.LocalDate;
 public class TransactionLine {
     private String id;
     private String user_id;
-    private LocalDate date;
+    private String date;
     private String ticker;
     private double price;
     private String currency;
     private String orderType;
     private int quantity;
 
-    public TransactionLine(String id, String user_id, LocalDate date, String ticker, double price, String currency, String orderType, int quantity) {
+    public TransactionLine(String id, String user_id, String date, String ticker, double price, String currency, String orderType, int quantity) {
         this.id = id;
         this.user_id = user_id;
         this.date = date;
@@ -31,7 +31,7 @@ public class TransactionLine {
         return user_id;
     }
 
-    public LocalDate getDate(){
+    public String getDate(){
         return date;
     }
 

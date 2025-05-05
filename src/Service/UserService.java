@@ -5,7 +5,7 @@ import Repository.IUserRepository;
 
 import java.util.List;
 
-public class UserService implements IUserService {
+public class UserService implements Service.IUserService {
     private final IUserRepository userRepository;
 
     public UserService(IUserRepository userRepository) {

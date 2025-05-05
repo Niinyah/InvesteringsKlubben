@@ -1,3 +1,4 @@
+import Controller.Controller;
 import Model.Stock;
 import Model.TransactionLine;
 import Model.User;
@@ -14,7 +15,10 @@ public class Main {
         IStockMarketService stockMarketService = new StockMarketService(stockMarketRepository);
         ITransactionService transactionService = new TransactionService(transactionRepository, stockMarketService);
         IUserService userService = new UserService(userRepository);
-        //IPortfolioService portfolioService = new PortfolioService();
+        // IPortfolioService portfolioService = new PortfolioService(stockMarketService, transactionService, userService);
+        // IUserinterface userinterface = new TerminalUserinterface();
+        // Controller controller = new Controller(portfolioService, stockMarketService, transactionService);
+
 
     }
 }

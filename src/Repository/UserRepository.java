@@ -24,9 +24,9 @@ public class UserRepository implements IUserRepository {
                 line = reader.nextLine();
                 String[] col = line.split(";");
 
-                LocalDate birthDate = LocalDate.parse(col[3]);
+                LocalDate birthDate = LocalDate.parse(col[3], formatter);
                 double initialCashDKK = Double.parseDouble(col[4]);
-                LocalDate createdAt = LocalDate.parse(col[5]);
+                LocalDate createdAt = LocalDate.parse(col[5], formatter);
                 LocalDate lastUpdated = LocalDate.parse(col[6], formatter);
 
 

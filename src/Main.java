@@ -1,16 +1,19 @@
 import Model.Stock;
+import Model.User;
 import Repository.IStockMarketRepository;
 import Repository.StockMarketRepository;
+import Repository.UserRepository;
 
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        IStockMarketRepository stockMarketRepository = new StockMarketRepository();
-        List<Stock> a = stockMarketRepository.getStockMarket();
+        UserRepository userRepository = new UserRepository();
+        List<User> users = userRepository.getUsers();
 
-        for (Stock s : a){
-            System.out.println(s);
+        for(User user : users ) {
+        System.out.println(user);
+
         }
     }
 }

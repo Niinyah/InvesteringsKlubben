@@ -54,4 +54,15 @@ public class TransactionLine {
     public int getQuantity(){
         return quantity;
     }
+
+    public String toString(){
+        return "Transaction id: " + getId() +
+                "\nUser id: " + getUser_id() +
+                "\nDate: " + getDate() +
+                "\nTicker: " + getTicker() +
+                "\nPrice: " + getPrice() + " " + getCurrency() +
+                "\nOrder Type: " + getOrderType() +
+                "\nQuantity: " + getQuantity();
+
+    }
 }

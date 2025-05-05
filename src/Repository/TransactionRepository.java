@@ -14,7 +14,6 @@ public class TransactionRepository implements ITransactionRepository {
     public List<TransactionLine> getTransactions(){
         File file = new File("src/Data/transactions.csv");
         List<TransactionLine> transactionLines = new ArrayList<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         try {
             Scanner reader = new Scanner(file);
@@ -22,8 +21,6 @@ public class TransactionRepository implements ITransactionRepository {
             while (reader.hasNextLine()){
                 line = reader.nextLine();
                 String[] lines = line.split(";");
-
-                LocalDate lastUpdate = LocalDate.parse(lines[2], formatter);
 
 
                 String[] col4 = lines[4].split(",");
@@ -35,7 +32,7 @@ public class TransactionRepository implements ITransactionRepository {
                 }
 
 
-                TransactionLine transactionLine = new TransactionLine(lines[0], lines[1], lastUpdate, lines[3],
+                TransactionLine transactionLine = new TransactionLine(lines[0], lines[1], lines[2], lines[3],
                         Double.parseDouble(commaFix), lines[5], lines[6], Integer.parseInt(lines[7]));
                 transactionLines.add(transactionLine);
             }

@@ -2,10 +2,7 @@ import Model.Stock;
 import Model.TransactionLine;
 import Model.User;
 import Repository.*;
-import Service.IStockMarketService;
-import Service.ITransactionService;
-import Service.StockMarketService;
-import Service.TransactionService;
+import Service.*;
 
 import java.util.List;
 
@@ -13,13 +10,12 @@ public class Main {
     public static void main(String[] args) {
         ITransactionRepository transactionRepository = new TransactionRepository();
         IStockMarketRepository stockMarketRepository = new StockMarketRepository();
+        IUserRepository userRepository = new UserRepository();
         IStockMarketService stockMarketService = new StockMarketService(stockMarketRepository);
         ITransactionService transactionService = new TransactionService(transactionRepository, stockMarketService);
+        IUserService userService = new UserService(userRepository);
+        //IPortfolioService portfolioService = new PortfolioService();
 
-        List<TransactionLine> lines = transactionService.getUserTransactionHistory("2");
-        for (TransactionLine t : lines){
-            System.out.println(t);
-        }
-        }
     }
+}
 

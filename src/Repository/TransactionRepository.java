@@ -19,7 +19,7 @@ public class TransactionRepository implements iTransactionRepository {
 
         try {
             Scanner reader = new Scanner(file);
-            String line;
+            String line = reader.nextLine();
             while (reader.hasNextLine()){
                 line = reader.nextLine();
                 String[] lines = line.split(";");
@@ -27,7 +27,17 @@ public class TransactionRepository implements iTransactionRepository {
                 LocalDate lastUpdate = LocalDate.parse(lines[2], formatter);
 
 
-                TransactionLine transactionLine = new TransactionLine(lines[0], lines[1], lastUpdate, lines[3], Double.parseDouble(lines[4]), lines[5], lines[6], Integer.parseInt(lines[7]));
+                String[] col4 = lines[4].split(",");
+                String commaFix;
+                if (col4.length == 2){
+                    commaFix = col4[0] + "." + col4[1];
+                } else {
+                    commaFix = col4[0];
+                }
+
+
+                TransactionLine transactionLine = new TransactionLine(lines[0], lines[1], lastUpdate, lines[3],
+                        Double.parseDouble(commaFix), lines[5], lines[6], Integer.parseInt(lines[7]));
                 transactionLines.add(transactionLine);
             }
             reader.close();
@@ -43,11 +53,12 @@ public class TransactionRepository implements iTransactionRepository {
             File file = new File("src/Data/transactions.csv");
             FileWriter outFile = new FileWriter(file, true);
             //String split = ";";
-            outFile.write(line.getId() + ";" + line.getUser_id() + ";" +
+            outFile.write("\n" +line.getId() + ";" + line.getUser_id() + ";" +
                     line.getDate() + ";" + line.getTicker() + ";" + line.getPrice()
-                    + ";" + line.getCurrency() + ";" + line.getOrderType() + ";" + line.getOrderType());
+                    + ";" + line.getCurrency() + ";" + line.getOrderType() + ";" + line.getQuantity());
+            outFile.close();
             /*
-        Path path = Paths.get("src/Data/transactions.csv");
+        Path path = Paths.get("transactions.csv");
             try {BufferedWriter writer = Files.newBufferedWriter(
                                             path, StandardOpenOption.APPEND);
                 writer.write(line.getId() + ";" + line.getUser_id() + ";" +

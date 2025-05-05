@@ -1,16 +1,14 @@
 import Model.Stock;
+import Model.TransactionLine;
 import Repository.IStockMarketRepository;
 import Repository.StockMarketRepository;
+import Repository.TransactionRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        IStockMarketRepository stockMarketRepository = new StockMarketRepository();
-        List<Stock> a = stockMarketRepository.getStockMarket();
 
-        for (Stock s : a){
-            System.out.println(s);
         }
-    }
 }

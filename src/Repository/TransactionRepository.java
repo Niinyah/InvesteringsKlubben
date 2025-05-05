@@ -1,6 +1,5 @@
 package Repository;
 
-import Model.Stock;
 import Model.TransactionLine;
 
 import java.io.*;
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class TransactionRepository implements iTransactionRepository {
+public class TransactionRepository implements ITransactionRepository {
     @Override
     public List<TransactionLine> getTransactions(){
         File file = new File("src/Data/transactions.csv");

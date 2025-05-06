@@ -11,9 +11,9 @@ public class Main {
         IStockMarketService stockMarketService = new StockMarketService(stockMarketRepository);
         Service.ITransactionService transactionService = new TransactionService(transactionRepository, stockMarketService);
         Service.IUserService userService = new UserService(userRepository);
-        // IPortfolioService portfolioService = new PortfolioService(stockMarketService, transactionService, userService);
-        // IUserinterface userinterface = new TerminalUserinterface();
+        IPortfolioService portfolioService = new PortfolioService(transactionService, stockMarketService, userService);
         // Controller controller = new Controller(portfolioService, stockMarketService, transactionService);
+        // IUserinterface userinterface = new TerminalUserinterface();
 
 
     }

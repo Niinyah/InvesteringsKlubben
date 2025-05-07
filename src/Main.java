@@ -1,7 +1,9 @@
+import Controller.Controller;
 import Repository.*;
 import Repository.ITransactionRepository;
 import Repository.IUserRepository;
 import Service.*;
+import UserInterface.TerminalUserInterface;
 
 public class Main {
     public static void main(String[] args) {
@@ -12,9 +14,9 @@ public class Main {
         Service.ITransactionService transactionService = new TransactionService(transactionRepository, stockMarketService);
         Service.IUserService userService = new UserService(userRepository);
         IPortfolioService portfolioService = new PortfolioService(transactionService, stockMarketService, userService);
-        // Controller controller = new Controller(portfolioService, stockMarketService, transactionService);
-        // IUserinterface userinterface = new TerminalUserinterface();
-
+        TerminalUserInterface terminalUserInterface = new TerminalUserInterface();
+        Controller controller = new Controller(portfolioService, stockMarketService, transactionService, userService, terminalUserInterface);
+        controller.start();
 
     }
 }

@@ -4,6 +4,7 @@ import Model.Stock;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Scanner;
 
 public class TerminalUserInterface {
@@ -59,10 +60,14 @@ public class TerminalUserInterface {
 
     public String chooseBuyAndSell() {
         System.out.println("Choose buy or sell");
+        System.out.println("" +
+                "1: buy\n" +
+                "2: sell\n" +
+                "x: return to menu");
         while (true) {
             String input = scanner.nextLine().trim().toLowerCase();
             switch (input) {
-                case "1", "2": {
+                case "1", "2", "x": {
                     return input;
                 }
                 default: {
@@ -72,8 +77,17 @@ public class TerminalUserInterface {
         }
 
     }
-    public void whichStock(){
-        System.out.println("Write the ticker you would like to purchase?");
+    public void whichStock(int orderType){
+        if (orderType==1) {
+            System.out.println("Write the ticker you would like to purchase?");
+            return;
+        }
+        System.out.println("Write the ticker you would like to sell?");
+    }
+
+
+    public void howMany(){
+        System.out.println("How many would you like to buy?");
     }
 
     public void printStockMarket(List<Stock> stocks) {
@@ -82,6 +96,24 @@ public class TerminalUserInterface {
         }
 
     }
+
+    public void printUserPortfolioStocks (Map<String, Integer> stocks){
+        for (String s : stocks.keySet()){
+            System.out.println(s + " : " + stocks.get(s));
+        }
+    }
+
+    public void insufficientFunds(){
+        System.out.println("Insufficient funds");
+    }
+
+    //public void message(String mes){
+    //switch "buy" ->
+    public void insufficientStocks(){
+        System.out.println("You cant sell that");
+    }
+
+    
 
     public String stringInput() {
         return scanner.nextLine();

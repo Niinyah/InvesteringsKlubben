@@ -39,7 +39,7 @@ public class StockMarketService implements IStockMarketService {
         }
         return 0;
     }
-    public boolean stockExists(String ticker){
+    public boolean stockDoesNotExists(String ticker){
         List<Stock> stocks = stockMarketRepository.getStockMarket();
         for (Stock stock : stocks) {
             if (ticker.equals((stock.getTicker()))) {

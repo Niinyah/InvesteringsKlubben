@@ -30,3 +30,4 @@ id;user_id;date;ticker;price;currency;order_type;quantity
 29;1;07-05-2025;PANDORA;765.0;DKK;sell;2
 30;1;07-05-2025;JYSK;453.0;DKK;buy;5
 31;1;07-05-2025;JYSK;453.0;DKK;sell;5
+32;1;07-05-2025;AMBU-B;124.0;DKK;buy;300

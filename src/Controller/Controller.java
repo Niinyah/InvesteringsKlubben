@@ -57,6 +57,7 @@ public class Controller {
                         case "2" -> rankedPortfolios();
                         case "3" -> loggedIn = false;
                         case "4" -> {
+                            terminalUserInterface.scannerClose();
                             return;
                         }
                         default -> terminalUserInterface.wrongInput();
@@ -74,6 +75,7 @@ public class Controller {
                         case "4" -> showTransactionHistory();
                         case "5" -> loggedIn = false;
                         case "6" -> {
+                            terminalUserInterface.scannerClose();
                             return;
                         }
                         default -> terminalUserInterface.wrongInput();

@@ -52,6 +52,7 @@ public class TerminalUserInterface {
 
     }
 
+
     public String adminMainMenu() {
         System.out.println();
         System.out.println(
@@ -178,6 +179,9 @@ public class TerminalUserInterface {
             scanner.nextLine();
             wrongInput();
         }
+    }
+    public void scannerClose(){
+        scanner.close();
     }
 
     public double doubleNumberInput() {

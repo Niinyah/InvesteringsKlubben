@@ -28,6 +28,7 @@ public class StockMarketService implements IStockMarketService {
         return stocks;
     }
 
+
     @Override
     public double getPrice(String ticker) {
         List<Stock> stocks = stockMarketRepository.getStockMarket();

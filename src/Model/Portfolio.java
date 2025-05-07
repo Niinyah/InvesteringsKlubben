@@ -50,4 +50,6 @@ public class Portfolio {
         portfolioLines.add(portfolioLine);
     }
 
+    public List<PortfolioLine> getPortfolioLines() { return portfolioLines; }
+
 }

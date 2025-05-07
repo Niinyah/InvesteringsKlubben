@@ -1,11 +1,14 @@
 package Service;
 
+import Comparators.InvestmentComparator;
+import Comparators.SectorComparator;
 import Model.Portfolio;
 import Model.PortfolioLine;
 import Model.Stock;
 import Model.TransactionLine;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,14 +34,20 @@ public class PortfolioService implements IPortfolioService {
         double bought = 0;
 
         for (TransactionLine transactionLine : userTransactionLines) {
-            int quantity = stocks.get(transactionLine.getTicker());
+            int quantity = 0;
+            if (stocks.get(transactionLine.getTicker()) != null) {
+
+                quantity = stocks.get(transactionLine.getTicker());
+            }
+
             //Sætter key og value i hashmappen
-            stocks.put(transactionLine.getTicker(), quantity + transactionLine.getQuantity());
 
             //lægger sammen hvor meget du har købt og solgt for, og regner prisen ud.
             if (transactionLine.getOrderType().equals("buy")) {
+                stocks.put(transactionLine.getTicker(), quantity + transactionLine.getQuantity());
                 bought += transactionLine.getQuantity() * transactionLine.getPrice();
             } else {
+                stocks.put(transactionLine.getTicker(), quantity - transactionLine.getQuantity());
                 sold += transactionLine.getQuantity() * transactionLine.getPrice();
             }
         }
@@ -57,18 +66,32 @@ public class PortfolioService implements IPortfolioService {
         //Tilføjer aktielinjen til userens portfolio
         for (String s : stocks.keySet()) {
             double sharePrice = stockMarketService.getPrice(s);
-            portfolio.setPortfolioLines(new PortfolioLine(s, stocks.get(s), sharePrice));
+            if (stocks.get(s) > 0) {
+                portfolio.setPortfolioLines(new PortfolioLine(s, stocks.get(s), sharePrice));
+            }
         }
         return portfolio;
     }
-      // Den laver alle portfolios ud fra userIDs
+
+    // Den laver alle portfolios ud fra userIDs
     @Override
     public List<Portfolio> adminPortfolios() {
         List<String> allUserIDs = userService.getAllUserIDs();
         List<Portfolio> allPortfolios = new ArrayList<>();
-        for (String userID : allUserIDs){
-           allPortfolios.add(createPortfolio(userID));
+        for (String userID : allUserIDs) {
+            allPortfolios.add(createPortfolio(userID));
         }
+        return allPortfolios;
+    }
+
+    public List<Portfolio> portfoliosSortedByInvestmentValue() {
+        Comparator<Portfolio> comparator = new InvestmentComparator();
+        List<String> allUserIDs = userService.getAllUserIDs();
+        List<Portfolio> allPortfolios = new ArrayList<>();
+        for (String userID : allUserIDs) {
+            allPortfolios.add(createPortfolio(userID));
+        }
+        allPortfolios.sort(comparator);
         return allPortfolios;
     }
 
@@ -77,7 +100,7 @@ public class PortfolioService implements IPortfolioService {
         Portfolio portfolio = createPortfolio(userID);
         double balance = portfolio.getBalance();
         double priceOfPurchase = stockMarketService.getPrice(ticker) * quantity;
-        if (balance >= priceOfPurchase){
+        if (balance >= priceOfPurchase) {
             return true;
         }
         return false;
@@ -88,8 +111,8 @@ public class PortfolioService implements IPortfolioService {
         Portfolio portfolio = createPortfolio(userID);
         HashMap<String, Integer> stocks = portfolio.getStocks();
 
-        for(String s : stocks.keySet()){
-            if (s.equals(ticker)){
+        for (String s : stocks.keySet()) {
+            if (s.equals(ticker)) {
                 if (stocks.get(s) >= quantity) {
                     return true;
                 }
@@ -97,7 +120,6 @@ public class PortfolioService implements IPortfolioService {
         }
         return false;
     }
-
 
 
 }

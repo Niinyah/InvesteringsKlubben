@@ -55,14 +55,10 @@ public class TransactionLine {
         return quantity;
     }
 
-    public String toString(){
-        return "Transaction id: " + getId() +
-                "\nUser id: " + getUser_id() +
-                "\nDate: " + getDate() +
-                "\nTicker: " + getTicker() +
-                "\nPrice: " + getPrice() + " " + getCurrency() +
-                "\nOrder Type: " + getOrderType() +
-                "\nQuantity: " + getQuantity();
-
+    @Override
+    public String toString() {
+        return String.format("%-12s %-8s %-9.2f %-8s %-8d %-8s", date, ticker, price, currency, quantity, orderType);
     }
+
+
 }

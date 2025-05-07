@@ -11,4 +11,5 @@ public interface IPortfolioService {
     // lav forskellige sorteringer på samlet portfoilios
     boolean canPurchase(String userID, String ticker, int quantity);
     boolean canSell(String userID, String ticker, int quantity);
+    List<Portfolio> portfoliosSortedByInvestmentValue();
 }

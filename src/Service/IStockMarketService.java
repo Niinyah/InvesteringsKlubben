@@ -9,4 +9,5 @@ public interface IStockMarketService {
     List<Stock> getStockMarket();
     List<Stock> getStockSector();
     double getPrice(String ticker);
+    boolean stockDoesNotExists(String ticker);
 }

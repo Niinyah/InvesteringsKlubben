@@ -3,9 +3,10 @@ package Service;
 import Model.User;
 import Repository.IUserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class UserService implements IUserService {
+public class UserService implements Service.IUserService {
     private final IUserRepository userRepository;
 
     public UserService(IUserRepository userRepository) {
@@ -47,5 +48,15 @@ public class UserService implements IUserService {
             }
         }
         return initialCash;
+    }
+
+    public List<String> getAllUserIDs(){
+        List<User> users = userRepository.getUsers();
+        List<String> userIDs = new ArrayList<>();
+
+        for (User user : users){
+            userIDs.add(user.getUserID());
+        }
+        return userIDs;
     }
 }

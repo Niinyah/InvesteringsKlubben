@@ -3,14 +3,13 @@ package Service;
 import Model.Stock;
 import Model.TransactionLine;
 import Repository.ITransactionRepository;
-import Repository.TransactionRepository;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TransactionService implements ITransactionService {
+public class TransactionService implements Service.ITransactionService {
 
      private final ITransactionRepository transactionRepository;
      private final IStockMarketService stockMarketService;

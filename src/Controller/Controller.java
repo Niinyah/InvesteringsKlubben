@@ -7,15 +7,12 @@ import UserInterface.TerminalUserInterface;
 import java.util.HashMap;
 
 public class Controller {
-    private IPortfolioService portfolioService;
-    private IStockMarketService stockMarketService;
-    private ITransactionService transactionService;
-    private IUserService userService;
-    private TerminalUserInterface terminalUserInterface;
+    private final IPortfolioService portfolioService;
+    private final IStockMarketService stockMarketService;
+    private final ITransactionService transactionService;
+    private final IUserService userService;
+    private final TerminalUserInterface terminalUserInterface;
     private String userID;
-    // admin bruger
-    // sortering af rank listen til admin bruger
-
 
     public Controller(IPortfolioService portfolioService, IStockMarketService stockMarketService,
                       ITransactionService transactionService, IUserService userService, TerminalUserInterface terminalUserInterface) {
@@ -53,7 +50,7 @@ public class Controller {
 
     }
 
-    public boolean userLogIn(String input){
+    public boolean userLogIn(String input) {
         nameVerifier(input);
         boolean loggedIn = true;
         while (loggedIn) {
@@ -73,14 +70,11 @@ public class Controller {
         return true;
     }
 
-    public boolean adminLogIn(){
+    public boolean adminLogIn() {
         boolean loggedIn = true;
         while (loggedIn) {
-            // make adminMenu method
             switch (terminalUserInterface.adminMainMenu()) {
-                // ShowAllPortfolio
                 case "1" -> showAllPortfolios();
-                // Ramk Portfolio
                 case "2" -> rankedPortfolios();
                 case "3" -> loggedIn = false;
                 case "4" -> {
@@ -102,8 +96,7 @@ public class Controller {
         switch (terminalUserInterface.chooseBuyAndSell()) {
             case "1" -> buy();
             case "2" -> sell();
-            case "x" -> {
-                return;
+            default -> {
             }
         }
     }
@@ -145,8 +138,10 @@ public class Controller {
             String ticker = getTicker();
             int quantity = getQuantity(sell);
             if (portfolioService.canSell(userID, ticker, quantity)) {
-                transactionService.createTransactionLine(userID, ticker, sell, quantity);
-                terminalUserInterface.printConfirmation(ticker, quantity, sold);
+                transactionService.createTransactionLine(
+                        userID, ticker, sell, quantity);
+                terminalUserInterface.printConfirmation(
+                        ticker, quantity, sold);
                 if (returnToMenu()) {
                     return;
                 }
@@ -161,12 +156,14 @@ public class Controller {
     }
 
     public void showAllPortfolios() {
-        terminalUserInterface.printAllPortfolios(portfolioService.adminPortfolios());
+        terminalUserInterface.printAllPortfolios(
+                portfolioService.adminPortfolios());
         returnToMenu();
     }
 
     public void rankedPortfolios() {
-        terminalUserInterface.printAllPortfolios(portfolioService.portfoliosSortedByInvestmentValue());
+        terminalUserInterface.printAllPortfolios(
+                portfolioService.portfoliosSortedByInvestmentValue());
         returnToMenu();
     }
 
@@ -194,7 +191,12 @@ public class Controller {
 
     public void showPortfolio() {
         Portfolio portfolio = portfolioService.createPortfolio(userID);
-        terminalUserInterface.printPortfolio(portfolio.getName(), portfolio.getBalance(), portfolio.getEquity(), portfolio.getInvestmentValue(), portfolio.getPortfolioLines());
+        terminalUserInterface.printPortfolio(
+                portfolio.getName(),
+                portfolio.getBalance(),
+                portfolio.getEquity(),
+                portfolio.getInvestmentValue(),
+                portfolio.getPortfolioLines());
         returnToMenu();
 
     }
@@ -209,7 +211,7 @@ public class Controller {
         terminalUserInterface.printReturnToMenuMSG();
         while (true) {
             String input = terminalUserInterface.stringInput();
-            if (input.trim().toLowerCase().equals("x")) {
+            if (input.trim().equalsIgnoreCase("x")) {
                 return true;
             }
         }

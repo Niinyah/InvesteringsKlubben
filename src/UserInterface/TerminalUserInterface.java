@@ -12,7 +12,6 @@ import java.util.Scanner;
 public class TerminalUserInterface {
     private final Scanner scanner = new Scanner(System.in);
 
-
     public String mainMenu() {
         System.out.println(
                 "\n+--------------------------------------+\n" +
@@ -66,12 +65,13 @@ public class TerminalUserInterface {
         }
     }
 
-    public String chooseBuyAndSell() {
+    public String chooseBuyOrSell() {
         System.out.println("Choose buy or sell");
-        System.out.println("" +
-                "1: buy\n" +
-                "2: sell\n" +
-                "x: return to menu");
+        System.out.println(
+                """
+                        1: buy
+                        2: sell
+                        x: return to menu""");
         while (true) {
             String input = scanner.nextLine().trim().toLowerCase();
             switch (input) {
@@ -109,17 +109,13 @@ public class TerminalUserInterface {
         System.out.println("Insufficient funds");
     }
 
-    //public void message(String mes){
-    //switch "buy" ->
     public void insufficientStocksMSG(String ticker, int quantity) {
         System.out.println("You do not own " + quantity + " shares of " + ticker + " ;-(");
     }
 
-
     public String stringInput() {
         return scanner.nextLine();
     }
-
 
     public int intNumberInput() {
         while (true) {

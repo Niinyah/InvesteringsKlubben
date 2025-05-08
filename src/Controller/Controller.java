@@ -93,7 +93,7 @@ public class Controller {
     }
 
     public void buyAndSell() {
-        switch (terminalUserInterface.chooseBuyAndSell()) {
+        switch (terminalUserInterface.chooseBuyOrSell()) {
             case "1" -> buy();
             case "2" -> sell();
             default -> {

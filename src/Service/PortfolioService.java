@@ -3,10 +3,8 @@ package Service;
 import Comparators.InvestmentComparator;
 import Comparators.SectorComparator;
 import Exceptions.UserIDException;
-import Model.Portfolio;
-import Model.PortfolioLine;
-import Model.Stock;
-import Model.TransactionLine;
+import Model.*;
+import Repository.ICurrencyRepository;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -18,18 +16,24 @@ public class PortfolioService implements IPortfolioService {
     private ITransactionService transactionService;
     private IStockMarketService stockMarketService;
     private IUserService userService;
+    private ICurrencyService currencyService;
 
-    public PortfolioService(ITransactionService transactionService, IStockMarketService stockMarketService, IUserService userService) {
+    public PortfolioService(ITransactionService transactionService,
+                            IStockMarketService stockMarketService,
+                            IUserService userService,
+                            ICurrencyService currencyService) {
         this.transactionService = transactionService;
         this.stockMarketService = stockMarketService;
         this.userService = userService;
+        this.currencyService = currencyService;
     }
 
 
     @Override
-    public Portfolio createPortfolio(String userID)  {
+    public Portfolio createPortfolio(String userID, String currency)  {
         List<TransactionLine> userTransactionLines = transactionService.getUserTransactionHistory(userID);
         HashMap<String, Integer> stocks = new HashMap<>();
+        Currency curr = currencyService.getCurrency(currency);
 
         double sold = 0;
         double bought = 0;
@@ -46,27 +50,29 @@ public class PortfolioService implements IPortfolioService {
             //lægger sammen hvor meget du har købt og solgt for, og regner prisen ud.
             if (transactionLine.getOrderType().equals("buy")) {
                 stocks.put(transactionLine.getTicker(), quantity + transactionLine.getQuantity());
-                bought += transactionLine.getQuantity() * transactionLine.getPrice();
+                var value = transactionLine.getQuantity() * transactionLine.getPrice();
+                bought += value / curr.getRate();
             } else {
                 stocks.put(transactionLine.getTicker(), quantity - transactionLine.getQuantity());
-                sold += transactionLine.getQuantity() * transactionLine.getPrice();
+                var value = transactionLine.getQuantity() * transactionLine.getPrice();
+                sold +=  value / curr.getRate();
             }
         }
 
         //Stående værdi af alle vores aktier
         double investmentValue = 0;
         for (String s : stocks.keySet()) {
-            investmentValue += stockMarketService.getPrice(s) * stocks.get(s);
+            investmentValue += stockMarketService.getPrice(s, currency) * stocks.get(s);
         }
         //Regner balancen ud fra startkapitalen
-        double balance = userService.getInitialCash(userID) + sold - bought;
+        double balance = (userService.getInitialCash(userID) / curr.getRate()) + sold - bought;
         //Regner totalen af vores aktier samt tilgængelig balance
         double equity = balance + investmentValue;
         //Opretter et ny portfolio objekt
-        Portfolio portfolio = new Portfolio(userService.getFullName(userID), balance, investmentValue, equity, userTransactionLines, stocks);
+        Portfolio portfolio = new Portfolio(userService.getFullName(userID), balance, investmentValue, equity, userTransactionLines, stocks, curr);
         //Tilføjer aktielinjen til userens portfolio
         for (String s : stocks.keySet()) {
-            double sharePrice = stockMarketService.getPrice(s);
+            double sharePrice = stockMarketService.getPrice(s, currency);
             if (stocks.get(s) > 0) {
                 portfolio.setPortfolioLines(new PortfolioLine(s, stocks.get(s), sharePrice));
             }
@@ -76,31 +82,31 @@ public class PortfolioService implements IPortfolioService {
 
     // Den laver alle portfolios ud fra userIDs
     @Override
-    public List<Portfolio> adminPortfolios() {
+    public List<Portfolio> adminPortfolios(String currency) {
         List<String> allUserIDs = userService.getAllUserIDs();
         List<Portfolio> allPortfolios = new ArrayList<>();
         for (String userID : allUserIDs) {
-            allPortfolios.add(createPortfolio(userID));
+            allPortfolios.add(createPortfolio(userID, currency));
         }
         return allPortfolios;
     }
 
-    public List<Portfolio> portfoliosSortedByInvestmentValue() {
+    public List<Portfolio> portfoliosSortedByInvestmentValue(String currency) {
         Comparator<Portfolio> comparator = new InvestmentComparator();
         List<String> allUserIDs = userService.getAllUserIDs();
         List<Portfolio> allPortfolios = new ArrayList<>();
         for (String userID : allUserIDs) {
-            allPortfolios.add(createPortfolio(userID));
+            allPortfolios.add(createPortfolio(userID, currency));
         }
         allPortfolios.sort(comparator);
         return allPortfolios;
     }
 
     @Override
-    public boolean canPurchase(String userID, String ticker, int quantity) {
-        Portfolio portfolio = createPortfolio(userID);
+    public boolean canPurchase(String userID, String ticker, int quantity, String currency) {
+        Portfolio portfolio = createPortfolio(userID, currency);
         double balance = portfolio.getBalance();
-        double priceOfPurchase = stockMarketService.getPrice(ticker) * quantity;
+        double priceOfPurchase = stockMarketService.getPrice(ticker, currency) * quantity;
         if (balance >= priceOfPurchase) {
             return true;
         }
@@ -108,8 +114,8 @@ public class PortfolioService implements IPortfolioService {
     }
 
     @Override
-    public boolean canSell(String userID, String ticker, int quantity) {
-        Portfolio portfolio = createPortfolio(userID);
+    public boolean canSell(String userID, String ticker, int quantity, String currency) {
+        Portfolio portfolio = createPortfolio(userID, currency);
         HashMap<String, Integer> stocks = portfolio.getStocks();
 
         for (String s : stocks.keySet()) {

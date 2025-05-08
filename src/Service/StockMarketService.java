@@ -1,6 +1,7 @@
 package Service;
 
 import Comparators.SectorComparator;
+import Model.Currency;
 import Model.Stock;
 import Repository.IStockMarketRepository;
 import java.util.Comparator;
@@ -8,16 +9,24 @@ import java.util.List;
 
 public class StockMarketService implements IStockMarketService {
     private final IStockMarketRepository stockMarketRepository;
+    private final ICurrencyService currencyService;
 
-    public StockMarketService(IStockMarketRepository StockMarketRepository) {
+    public StockMarketService(IStockMarketRepository StockMarketRepository, ICurrencyService currencyService ) {
         this.stockMarketRepository = StockMarketRepository;
+        this.currencyService = currencyService;
+
     }
 
 
     @Override
-    public List<Stock> getStockMarket() {
-
-        return stockMarketRepository.getStockMarket();
+    public List<Stock> getStockMarket(String currency) {
+        List<Stock> stocks = stockMarketRepository.getStockMarket();
+        Currency currency1 = currencyService.getCurrency(currency);
+        for (Stock s : stocks){
+            s.setPrice(s.getPrice() / currency1.getRate());
+            s.setCurrency(currency);
+        }
+        return stocks;
     }
 
     @Override
@@ -30,11 +39,12 @@ public class StockMarketService implements IStockMarketService {
 
 
     @Override
-    public double getPrice(String ticker) {
+    public double getPrice(String ticker, String currency) {
         List<Stock> stocks = stockMarketRepository.getStockMarket();
+        Currency currency1 = currencyService.getCurrency(currency);
         for (Stock stock : stocks) {
             if (ticker.equals(stock.getTicker())) {
-                return stock.getPrice();
+                return stock.getPrice() / currency1.getRate();
             }
 
         }

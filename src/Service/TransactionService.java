@@ -25,7 +25,7 @@ public class TransactionService implements Service.ITransactionService {
     @Override
     public void createTransactionLine(String userID, String ticker, String orderType, int quantity) {
         List<TransactionLine> allTransactionLines = transactionRepository.getTransactions();
-        List<Stock> stockMarket = stockMarketService.getStockMarket();
+        List<Stock> stockMarket = stockMarketService.getStockMarket("EUR");
 
         //Få sidste tal fra repository +1
         int lastIdNumber = Integer.parseInt(allTransactionLines.getLast().getId()) + 1;

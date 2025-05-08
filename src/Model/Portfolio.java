@@ -12,14 +12,16 @@ public class Portfolio {
     private List<TransactionLine> history;
     private HashMap<String, Integer> stocks;
     private List<PortfolioLine> portfolioLines = new ArrayList<>();
+    private Currency currency;
 
-    public Portfolio(String name, double balance, double investmentValue, double equity, List<TransactionLine> history, HashMap<String, Integer> stocks) {
+    public Portfolio(String name, double balance, double investmentValue, double equity, List<TransactionLine> history, HashMap<String, Integer> stocks, Currency currency) {
         this.name = name;
         this.balance = balance;
         this.investmentValue = investmentValue;
         this.equity = equity;
         this.history = history;
         this.stocks = stocks;
+        this.currency = currency;
     }
 
     public String getName() {
@@ -36,6 +38,10 @@ public class Portfolio {
 
     public double getEquity() {
         return equity;
+    }
+
+    public String getCurrency(){
+        return currency.getCurrency();
     }
 
     public List<TransactionLine> getHistory() {

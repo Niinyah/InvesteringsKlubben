@@ -1,5 +1,7 @@
 package Model;
 
+import Service.ICurrencyService;
+
 import java.time.LocalDate;
 
 public class Stock {
@@ -14,7 +16,10 @@ public class Stock {
     private LocalDate lastUpdated;
 
 
-    public Stock(String ticker, String name, String sector, double price, String currency, String rating, double dividendYield, String market, LocalDate lastUpdated) {
+    public Stock(String ticker, String name, String sector,
+                 double price, String currency, String rating,
+                 double dividendYield, String market,
+                 LocalDate lastUpdated) {
         this.ticker = ticker;
         this.name = name;
         this.sector = sector;
@@ -42,8 +47,16 @@ public class Stock {
         return price;
     }
 
+    public void setPrice(double price){
+        this.price = price;
+    }
+
     public String getCurrency() {
         return currency;
+    }
+
+    public void setCurrency(String currency){
+        this.currency = currency;
     }
 
     public String getRating() {

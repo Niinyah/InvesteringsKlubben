@@ -13,6 +13,7 @@ import java.util.Scanner;
 public class StockMarketRepository implements IStockMarketRepository {
 
 
+
     @Override
     public List<Stock> getStockMarket() {
         File file = new File("src/Data/stockMarket.csv");

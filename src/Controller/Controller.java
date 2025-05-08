@@ -12,15 +12,19 @@ public class Controller {
     private final ITransactionService transactionService;
     private final IUserService userService;
     private final TerminalUserInterface terminalUserInterface;
+    private final ICurrencyService currencyService;
     private String userID;
+    private String currency = "EUR";
 
     public Controller(IPortfolioService portfolioService, IStockMarketService stockMarketService,
-                      ITransactionService transactionService, IUserService userService, TerminalUserInterface terminalUserInterface) {
+                      ITransactionService transactionService, IUserService userService, TerminalUserInterface terminalUserInterface, ICurrencyService currencyService) {
         this.portfolioService = portfolioService;
         this.stockMarketService = stockMarketService;
         this.transactionService = transactionService;
         this.userService = userService;
         this.terminalUserInterface = terminalUserInterface;
+        this.currencyService = currencyService;
+
     }
 
     public void nameVerifier(String input) {
@@ -60,7 +64,8 @@ public class Controller {
                 case "3" -> showPortfolio();
                 case "4" -> showTransactionHistory();
                 case "5" -> loggedIn = false;
-                case "6" -> {
+                case "6" -> chooseCurrency();
+                case "7" -> {
                     terminalUserInterface.scannerClose();
                     return false;
                 }
@@ -87,8 +92,21 @@ public class Controller {
         return true;
     }
 
+    public void chooseCurrency() {
+        terminalUserInterface.chooseCurrencyMSG();
+        while (true) {
+            String currencyInput = terminalUserInterface.stringInput();
+            String currency = currencyService.getCurrency(currencyInput).getCurrency();
+            if (currencyInput.equalsIgnoreCase(currency)) {
+                this.currency = currency;
+                return;
+            }
+            terminalUserInterface.wrongInputMSG();
+        }
+    }
+
     public void showStockMarket() {
-        terminalUserInterface.printStockTable(stockMarketService.getStockMarket());
+        terminalUserInterface.printStockTable(stockMarketService.getStockMarket(currency));
         returnToMenu();
     }
 
@@ -102,13 +120,13 @@ public class Controller {
     }
 
     public void buy() {
-        terminalUserInterface.printStockTable(stockMarketService.getStockMarket());
+        terminalUserInterface.printStockTable(stockMarketService.getStockMarket(currency));
         String buy = "buy";
         String bought = "bought";
         terminalUserInterface.whichStockMSG(buy);
         String ticker = getTicker();
         int quantity = getQuantity(buy);
-        if (portfolioService.canPurchase(userID, ticker, quantity)) {
+        if (portfolioService.canPurchase(userID, ticker, quantity, currency)) {
             transactionService.createTransactionLine(userID, ticker, buy, quantity);
             terminalUserInterface.printConfirmation(ticker, quantity, bought);
             if (returnToMenu()) {
@@ -122,7 +140,7 @@ public class Controller {
     }
 
     public void sell() {
-        Portfolio portfolio = portfolioService.createPortfolio(userID);
+        Portfolio portfolio = portfolioService.createPortfolio(userID, currency);
         HashMap<String, Integer> stocks = portfolio.getStocks();
         String sell = "sell";
         String sold = "sold";
@@ -137,7 +155,7 @@ public class Controller {
             terminalUserInterface.whichStockMSG(sell);
             String ticker = getTicker();
             int quantity = getQuantity(sell);
-            if (portfolioService.canSell(userID, ticker, quantity)) {
+            if (portfolioService.canSell(userID, ticker, quantity, currency)) {
                 transactionService.createTransactionLine(
                         userID, ticker, sell, quantity);
                 terminalUserInterface.printConfirmation(
@@ -157,13 +175,13 @@ public class Controller {
 
     public void showAllPortfolios() {
         terminalUserInterface.printAllPortfolios(
-                portfolioService.adminPortfolios());
+                portfolioService.adminPortfolios(currency));
         returnToMenu();
     }
 
     public void rankedPortfolios() {
         terminalUserInterface.printAllPortfolios(
-                portfolioService.portfoliosSortedByInvestmentValue());
+                portfolioService.portfoliosSortedByInvestmentValue(currency));
         returnToMenu();
     }
 
@@ -190,19 +208,21 @@ public class Controller {
     }
 
     public void showPortfolio() {
-        Portfolio portfolio = portfolioService.createPortfolio(userID);
+        Portfolio portfolio = portfolioService.createPortfolio(userID, currency);
         terminalUserInterface.printPortfolio(
                 portfolio.getName(),
                 portfolio.getBalance(),
                 portfolio.getEquity(),
+                portfolio.getCurrency(),
                 portfolio.getInvestmentValue(),
+
                 portfolio.getPortfolioLines());
         returnToMenu();
 
     }
 
     public void showTransactionHistory() {
-        Portfolio portfolio = portfolioService.createPortfolio(userID);
+        Portfolio portfolio = portfolioService.createPortfolio(userID, currency);
         terminalUserInterface.printTransactionHistory(portfolio.getHistory());
         returnToMenu();
     }

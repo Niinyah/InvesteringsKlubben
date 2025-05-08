@@ -22,14 +22,15 @@ public class TerminalUserInterface {
                         "|  3 | Portfolio Overview              |\n" +
                         "|  4 | Transaction History             |\n" +
                         "|  5 | Log Out                         |\n" +
-                        "|  6 | Close Program                   |\n" +
+                        "|  6 | Choose Currency                 |\n" +
+                        "|  7 | Close Program                   |\n" +
                         "+--------------------------------------+\n" +
                         "Choose an action: "
         );
         while (true) {
             String input = scanner.nextLine().trim().toLowerCase();
             switch (input) {
-                case "1", "2", "3", "4", "5", "6": {
+                case "1", "2", "3", "4", "5", "6", "7": {
                     return input;
                 }
                 default: {
@@ -104,6 +105,10 @@ public class TerminalUserInterface {
         System.out.println("How many would you like to " + orderType + "?");
     }
 
+    public void chooseCurrencyMSG(){
+        System.out.println("Which currency would you like to be displayed in the program?");
+    }
+
 
     public void insufficientFundsMSG() {
         System.out.println("Insufficient funds");
@@ -157,18 +162,17 @@ public class TerminalUserInterface {
         }
     }
 
-    public void printPortfolio(String fullName, double balance, double equity, double investmentValue, List<PortfolioLine> portfolioLines) {
+    public void printPortfolio(String fullName, double balance, double equity,String currency, double investmentValue, List<PortfolioLine> portfolioLines) {
         final int LINE_WIDTH = 60;
-        final String CURRENCY = "DKK";
 
         printLine("=", LINE_WIDTH);
         System.out.printf("Portfolio Overview for: %s%n", fullName);
         printLine("=", LINE_WIDTH);
 
         // Align currency and values to the right with consistent width
-        System.out.printf("%-30s %3s %10.2f%n", "Balance:", CURRENCY, balance);
-        System.out.printf("%-30s %3s %10.2f%n", "Investment Value:", CURRENCY, investmentValue);
-        System.out.printf("%-30s %3s %10.2f%n", "Equity:", CURRENCY, equity);
+        System.out.printf("%-30s %3s %10.2f%n", "Balance:", currency, balance);
+        System.out.printf("%-30s %3s %10.2f%n", "Investment Value:", currency, investmentValue);
+        System.out.printf("%-30s %3s %10.2f%n", "Equity:", currency, equity);
 
         printLine("-", LINE_WIDTH);
         System.out.printf("%-10s %-10s %10s %15s%n", "Ticker", "Quantity", "Price", "Value");
@@ -181,8 +185,8 @@ public class TerminalUserInterface {
                 System.out.printf("%-10s %-10d %3s %7.2f %9s %7.2f%n",
                         line.getTicker(),
                         line.getQuantity(),
-                        CURRENCY, line.getSharePrice(),
-                        CURRENCY, line.getValue());
+                        currency, line.getSharePrice(),
+                        currency, line.getValue());
             }
         }
 
@@ -225,7 +229,7 @@ public class TerminalUserInterface {
 
         for (Portfolio portfolio : portfolios) {
             System.out.println();
-            printPortfolio(portfolio.getName(), portfolio.getBalance(), portfolio.getEquity(), portfolio.getInvestmentValue(), portfolio.getPortfolioLines());
+            printPortfolio(portfolio.getName(), portfolio.getBalance(), portfolio.getEquity(), portfolio.getCurrency(),portfolio.getInvestmentValue(), portfolio.getPortfolioLines());
         }
 
     }

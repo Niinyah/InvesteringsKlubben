@@ -13,7 +13,7 @@ public class TerminalUserInterface {
     private Scanner scanner = new Scanner(System.in);
 
 
-    public void loggingIn() {
+    public void loggingInMSG() {
         System.out.println("Welcome to Investeringsklubben!");
         System.out.println("Enter full name:");
     }
@@ -23,7 +23,6 @@ public class TerminalUserInterface {
     }
 
     public String mainMenu() {
-        System.out.println();
         System.out.println(
                 "\n+--------------------------------------+\n" +
                         "|        INVESTERINGSKLUBBEN MENU      |\n" +

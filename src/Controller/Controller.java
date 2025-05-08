@@ -5,7 +5,6 @@ import Service.*;
 import UserInterface.TerminalUserInterface;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class Controller {
     private IPortfolioService portfolioService;
@@ -41,49 +40,58 @@ public class Controller {
         }
     }
 
-
     public void start() {
-        while (true) {
-            terminalUserInterface.loggingIn();
+        boolean running = true;
+        while (running) {
+            terminalUserInterface.loggingInMSG();
             String input = terminalUserInterface.stringInput();
             if (input.equals("Admin")) {
-                boolean loggedIn = true;
-                while (loggedIn) {
-                    // make adminMenu method
-                    switch (terminalUserInterface.adminMainMenu()) {
-                        // ShowAllPortfolio
-                        case "1" -> showAllPortfolios();
-                        // Ramk Portfolio
-                        case "2" -> rankedPortfolios();
-                        case "3" -> loggedIn = false;
-                        case "4" -> {
-                            terminalUserInterface.scannerClose();
-                            return;
-                        }
-                        default -> terminalUserInterface.wrongInput();
-                    }
-                }
-
+                running = adminLogIn();
             } else {
-                nameVerifier(input);
-                boolean loggedIn = true;
-                while (loggedIn) {
-                    switch (terminalUserInterface.mainMenu()) {
-                        case "1" -> showStockMarket();
-                        case "2" -> buyAndSell();
-                        case "3" -> showPortfolio();
-                        case "4" -> showTransactionHistory();
-                        case "5" -> loggedIn = false;
-                        case "6" -> {
-                            terminalUserInterface.scannerClose();
-                            return;
-                        }
-                        default -> terminalUserInterface.wrongInput();
-                    }
-                }
+                running = userLogIn(input);
             }
         }
 
+    }
+
+    public boolean userLogIn(String input){
+        nameVerifier(input);
+        boolean loggedIn = true;
+        while (loggedIn) {
+            switch (terminalUserInterface.mainMenu()) {
+                case "1" -> showStockMarket();
+                case "2" -> buyAndSell();
+                case "3" -> showPortfolio();
+                case "4" -> showTransactionHistory();
+                case "5" -> loggedIn = false;
+                case "6" -> {
+                    terminalUserInterface.scannerClose();
+                    return false;
+                }
+                default -> terminalUserInterface.wrongInput();
+            }
+        }
+        return true;
+    }
+
+    public boolean adminLogIn(){
+        boolean loggedIn = true;
+        while (loggedIn) {
+            // make adminMenu method
+            switch (terminalUserInterface.adminMainMenu()) {
+                // ShowAllPortfolio
+                case "1" -> showAllPortfolios();
+                // Ramk Portfolio
+                case "2" -> rankedPortfolios();
+                case "3" -> loggedIn = false;
+                case "4" -> {
+                    terminalUserInterface.scannerClose();
+                    return false;
+                }
+                default -> terminalUserInterface.wrongInput();
+            }
+        }
+        return true;
     }
 
     public void showStockMarket() {

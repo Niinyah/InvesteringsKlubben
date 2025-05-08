@@ -2,6 +2,7 @@ package Service;
 
 import Comparators.InvestmentComparator;
 import Comparators.SectorComparator;
+import Exceptions.UserIDException;
 import Model.Portfolio;
 import Model.PortfolioLine;
 import Model.Stock;
@@ -26,7 +27,7 @@ public class PortfolioService implements IPortfolioService {
 
 
     @Override
-    public Portfolio createPortfolio(String userID) {
+    public Portfolio createPortfolio(String userID)  {
         List<TransactionLine> userTransactionLines = transactionService.getUserTransactionHistory(userID);
         HashMap<String, Integer> stocks = new HashMap<>();
 

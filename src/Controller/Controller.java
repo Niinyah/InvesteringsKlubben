@@ -13,7 +13,6 @@ public class Controller {
     private IUserService userService;
     private TerminalUserInterface terminalUserInterface;
     private String userID;
-
     // admin bruger
     // sortering af rank listen til admin bruger
 
@@ -111,12 +110,14 @@ public class Controller {
 
     public void buy() {
         terminalUserInterface.printStockTable(stockMarketService.getStockMarket());
-        terminalUserInterface.whichStock("buy");
+        String buy = "buy";
+        String bought = "bought";
+        terminalUserInterface.whichStock(buy);
         String ticker = getTicker();
-        int quantity = getQuantity("buy");
+        int quantity = getQuantity(buy);
         if (portfolioService.canPurchase(userID, ticker, quantity)) {
-            transactionService.createTransactionLine(userID, ticker, "buy", quantity);
-            terminalUserInterface.printConfirmation(ticker, quantity, "bought");
+            transactionService.createTransactionLine(userID, ticker, buy, quantity);
+            terminalUserInterface.printConfirmation(ticker, quantity, bought);
             if (returnToMenu()) {
                 return;
             }
@@ -130,6 +131,8 @@ public class Controller {
     public void sell() {
         Portfolio portfolio = portfolioService.createPortfolio(userID);
         HashMap<String, Integer> stocks = portfolio.getStocks();
+        String sell = "sell";
+        String sold = "sold";
         boolean hasStocks = false;
         for (String stock : stocks.keySet()) {
             if (stocks.get(stock) > 0) {
@@ -138,12 +141,12 @@ public class Controller {
         }
         if (hasStocks) {
             terminalUserInterface.printUserPortfolioStocks(portfolio.getStocks());
-            terminalUserInterface.whichStock("sell");
+            terminalUserInterface.whichStock(sell);
             String ticker = getTicker();
-            int quantity = getQuantity("sell");
+            int quantity = getQuantity(sell);
             if (portfolioService.canSell(userID, ticker, quantity)) {
-                transactionService.createTransactionLine(userID, ticker, "sell", quantity);
-                terminalUserInterface.printConfirmation(ticker, quantity, "sold");
+                transactionService.createTransactionLine(userID, ticker, sell, quantity);
+                terminalUserInterface.printConfirmation(ticker, quantity, sold);
                 if (returnToMenu()) {
                     return;
                 }

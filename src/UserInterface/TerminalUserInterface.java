@@ -10,17 +10,8 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class TerminalUserInterface {
-    private Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
 
-
-    public void loggingInMSG() {
-        System.out.println("Welcome to Investeringsklubben!");
-        System.out.println("Enter full name:");
-    }
-
-    public void wrongInput() {
-        System.out.println("Wrong input, please try again :-)");
-    }
 
     public String mainMenu() {
         System.out.println(
@@ -43,14 +34,11 @@ public class TerminalUserInterface {
                     return input;
                 }
                 default: {
-                    wrongInput();
+                    wrongInputMSG();
                 }
             }
         }
-
-
     }
-
 
     public String adminMainMenu() {
         System.out.println();
@@ -72,40 +60,10 @@ public class TerminalUserInterface {
                     return input;
                 }
                 default: {
-                    wrongInput();
+                    wrongInputMSG();
                 }
             }
         }
-
-
-    }
-
-    public void printStockTable(List<Stock> stocks) {
-        System.out.println("+----------+---------------------------+----------------+-----------+--------+----------------------+--------------+");
-        System.out.println("| Ticker   | Name                      | Sector         | Price     | Curr.  | Market               | Last Updated |");
-        System.out.println("+----------+---------------------------+----------------+-----------+--------+----------------------+--------------+");
-
-        for (Stock stock : stocks) {
-            System.out.println("| " +
-                    padRight(stock.getTicker(), 8) + " | " +
-                    padRight(stock.getName(), 25) + " | " +
-                    padRight(stock.getSector(), 14) + " | " +
-                    padLeft(String.format("%.2f", stock.getPrice()), 9) + " | " +
-                    padRight(stock.getCurrency(), 6) + " | " +
-                    padRight(stock.getMarket(), 20) + " | " +
-                    padRight(stock.getLastUpdated().toString(), 12) + " |");
-        }
-
-        System.out.println("+----------+---------------------------+----------------+-----------+--------+----------------------+--------------+");
-    }
-
-    // Helper methods to pad strings
-    private String padRight(String text, int length) {
-        return String.format("%-" + length + "s", text);
-    }
-
-    private String padLeft(String text, int length) {
-        return String.format("%" + length + "s", text);
     }
 
     public String chooseBuyAndSell() {
@@ -121,39 +79,39 @@ public class TerminalUserInterface {
                     return input;
                 }
                 default: {
-                    wrongInput();
+                    wrongInputMSG();
                 }
             }
         }
 
     }
 
-    public void whichStock(String orderType) {
+    public void loggingInMSG() {
+        System.out.println("Welcome to Investeringsklubben!");
+        System.out.println("Enter full name:");
+    }
+
+    public void wrongInputMSG() {
+        System.out.println("Wrong input, please try again :-)");
+    }
+
+    public void whichStockMSG(String orderType) {
         System.out.println("Write the ticker you would like to " + orderType + "?");
     }
 
 
-    public void howMany(String orderType) {
-
+    public void howManyMSG(String orderType) {
         System.out.println("How many would you like to " + orderType + "?");
     }
 
 
-    public void printUserPortfolioStocks(Map<String, Integer> stocks) {
-        for (String s : stocks.keySet()) {
-            if (stocks.get(s) > 0) {
-                System.out.println(s + " : " + stocks.get(s));
-            }
-        }
-    }
-
-    public void insufficientFunds() {
+    public void insufficientFundsMSG() {
         System.out.println("Insufficient funds");
     }
 
     //public void message(String mes){
     //switch "buy" ->
-    public void insufficientStocks(String ticker, int quantity) {
+    public void insufficientStocksMSG(String ticker, int quantity) {
         System.out.println("You do not own " + quantity + " shares of " + ticker + " ;-(");
     }
 
@@ -176,11 +134,8 @@ public class TerminalUserInterface {
 
             }
             scanner.nextLine();
-            wrongInput();
+            wrongInputMSG();
         }
-    }
-    public void scannerClose(){
-        scanner.close();
     }
 
     public double doubleNumberInput() {
@@ -192,6 +147,18 @@ public class TerminalUserInterface {
         scanner.nextLine();
         return input;
 
+    }
+
+    public void scannerClose() {
+        scanner.close();
+    }
+
+    public void printUserPortfolioStocks(Map<String, Integer> stocks) {
+        for (String s : stocks.keySet()) {
+            if (stocks.get(s) > 0) {
+                System.out.println(s + " : " + stocks.get(s));
+            }
+        }
     }
 
     public void printPortfolio(String fullName, double balance, double equity, double investmentValue, List<PortfolioLine> portfolioLines) {
@@ -229,11 +196,40 @@ public class TerminalUserInterface {
     private void printLine(String symbol, int length) {
         System.out.println(symbol.repeat(length));
     }
-    public void printAllPortfolios(List<Portfolio> portfolios){
 
-        for(Portfolio portfolio : portfolios){
+    public void printStockTable(List<Stock> stocks) {
+        System.out.println("+----------+---------------------------+----------------+-----------+--------+----------------------+--------------+");
+        System.out.println("| Ticker   | Name                      | Sector         | Price     | Curr.  | Market               | Last Updated |");
+        System.out.println("+----------+---------------------------+----------------+-----------+--------+----------------------+--------------+");
+
+        for (Stock stock : stocks) {
+            System.out.println("| " +
+                    padRight(stock.getTicker(), 8) + " | " +
+                    padRight(stock.getName(), 25) + " | " +
+                    padRight(stock.getSector(), 14) + " | " +
+                    padLeft(String.format("%.2f", stock.getPrice()), 9) + " | " +
+                    padRight(stock.getCurrency(), 6) + " | " +
+                    padRight(stock.getMarket(), 20) + " | " +
+                    padRight(stock.getLastUpdated().toString(), 12) + " |");
+        }
+
+        System.out.println("+----------+---------------------------+----------------+-----------+--------+----------------------+--------------+");
+    }
+
+    private String padRight(String text, int length) {
+        return String.format("%-" + length + "s", text);
+    }
+
+    private String padLeft(String text, int length) {
+        return String.format("%" + length + "s", text);
+    }
+
+
+    public void printAllPortfolios(List<Portfolio> portfolios) {
+
+        for (Portfolio portfolio : portfolios) {
             System.out.println();
-            printPortfolio(portfolio.getName(),portfolio.getBalance(), portfolio.getEquity(), portfolio.getInvestmentValue(), portfolio.getPortfolioLines());
+            printPortfolio(portfolio.getName(), portfolio.getBalance(), portfolio.getEquity(), portfolio.getInvestmentValue(), portfolio.getPortfolioLines());
         }
 
     }
@@ -253,9 +249,7 @@ public class TerminalUserInterface {
     }
 
     public void printConfirmation(String ticker, int quantity, String orderType) {
-
         System.out.println("You have succesfully " + orderType + " " + quantity + " shares of " + ticker + " :-)");
-
     }
 
 }

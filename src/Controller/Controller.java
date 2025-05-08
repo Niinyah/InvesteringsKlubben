@@ -31,7 +31,7 @@ public class Controller {
                 this.userID = userID;
                 return;
             }
-            terminalUserInterface.wrongInput();
+            terminalUserInterface.wrongInputMSG();
             fullName = terminalUserInterface.stringInput();
         }
     }
@@ -64,7 +64,7 @@ public class Controller {
                     terminalUserInterface.scannerClose();
                     return false;
                 }
-                default -> terminalUserInterface.wrongInput();
+                default -> terminalUserInterface.wrongInputMSG();
             }
         }
         return true;
@@ -81,7 +81,7 @@ public class Controller {
                     terminalUserInterface.scannerClose();
                     return false;
                 }
-                default -> terminalUserInterface.wrongInput();
+                default -> terminalUserInterface.wrongInputMSG();
             }
         }
         return true;
@@ -105,7 +105,7 @@ public class Controller {
         terminalUserInterface.printStockTable(stockMarketService.getStockMarket());
         String buy = "buy";
         String bought = "bought";
-        terminalUserInterface.whichStock(buy);
+        terminalUserInterface.whichStockMSG(buy);
         String ticker = getTicker();
         int quantity = getQuantity(buy);
         if (portfolioService.canPurchase(userID, ticker, quantity)) {
@@ -115,7 +115,7 @@ public class Controller {
                 return;
             }
         }
-        terminalUserInterface.insufficientFunds();
+        terminalUserInterface.insufficientFundsMSG();
         returnToMenu();
 
 
@@ -134,7 +134,7 @@ public class Controller {
         }
         if (hasStocks) {
             terminalUserInterface.printUserPortfolioStocks(portfolio.getStocks());
-            terminalUserInterface.whichStock(sell);
+            terminalUserInterface.whichStockMSG(sell);
             String ticker = getTicker();
             int quantity = getQuantity(sell);
             if (portfolioService.canSell(userID, ticker, quantity)) {
@@ -146,7 +146,7 @@ public class Controller {
                     return;
                 }
             }
-            terminalUserInterface.insufficientStocks(ticker, quantity);
+            terminalUserInterface.insufficientStocksMSG(ticker, quantity);
         } else {
             terminalUserInterface.printNoStocksMessage();
         }
@@ -174,7 +174,7 @@ public class Controller {
         while (tickerDoesNotExists) {
             ticker = terminalUserInterface.stringInput();
             if (stockMarketService.stockDoesNotExists(ticker)) {
-                terminalUserInterface.wrongInput();
+                terminalUserInterface.wrongInputMSG();
 
             }
             tickerDoesNotExists = stockMarketService.stockDoesNotExists(ticker);
@@ -184,7 +184,7 @@ public class Controller {
     }
 
     public int getQuantity(String orderType) {
-        terminalUserInterface.howMany(orderType);
+        terminalUserInterface.howManyMSG(orderType);
         return terminalUserInterface.intNumberInput();
 
     }

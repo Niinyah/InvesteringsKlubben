@@ -13,10 +13,10 @@ import java.util.List;
 
 public class PortfolioService implements IPortfolioService {
 
-    private ITransactionService transactionService;
-    private IStockMarketService stockMarketService;
-    private IUserService userService;
-    private ICurrencyService currencyService;
+    private final ITransactionService transactionService;
+    private final IStockMarketService stockMarketService;
+    private final IUserService userService;
+    private final ICurrencyService currencyService;
 
     public PortfolioService(ITransactionService transactionService,
                             IStockMarketService stockMarketService,
@@ -59,16 +59,13 @@ public class PortfolioService implements IPortfolioService {
             }
         }
 
-        //Stående værdi af alle vores aktier
         double investmentValue = 0;
         for (String s : stocks.keySet()) {
             investmentValue += stockMarketService.getPrice(s, currency) * stocks.get(s);
         }
-        //Regner balancen ud fra startkapitalen
         double balance = (userService.getInitialCash(userID) / curr.getRate()) + sold - bought;
-        //Regner totalen af vores aktier samt tilgængelig balance
         double equity = balance + investmentValue;
-        //Opretter et ny portfolio objekt
+
         Portfolio portfolio = new Portfolio(userService.getFullName(userID), balance, investmentValue, equity, userTransactionLines, stocks, curr);
         //Tilføjer aktielinjen til userens portfolio
         for (String s : stocks.keySet()) {

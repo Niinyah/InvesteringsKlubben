@@ -14,9 +14,7 @@ public class StockMarketService implements IStockMarketService {
     public StockMarketService(IStockMarketRepository StockMarketRepository, ICurrencyService currencyService ) {
         this.stockMarketRepository = StockMarketRepository;
         this.currencyService = currencyService;
-
     }
-
 
     @Override
     public List<Stock> getStockMarket(String currency) {

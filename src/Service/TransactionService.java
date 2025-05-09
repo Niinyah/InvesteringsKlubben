@@ -9,23 +9,21 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TransactionService implements Service.ITransactionService {
+public class TransactionService implements ITransactionService {
 
-     private final ITransactionRepository transactionRepository;
-     private final IStockMarketService stockMarketService;
+    private final ITransactionRepository transactionRepository;
+    private final IStockMarketService stockMarketService;
 
-
-    public TransactionService (ITransactionRepository transactionRepository, IStockMarketService stockMarketService){
+    public TransactionService(ITransactionRepository transactionRepository, IStockMarketService stockMarketService) {
         this.transactionRepository = transactionRepository;
         this.stockMarketService = stockMarketService;
     }
 
-
-
     @Override
-    public void createTransactionLine(String userID, String ticker, String orderType, int quantity) {
+    public void createTransactionLine(String userID, String ticker, String orderType, int quantity, String currency) {
         List<TransactionLine> allTransactionLines = transactionRepository.getTransactions();
-        List<Stock> stockMarket = stockMarketService.getStockMarket("EUR");
+        List<Stock> stockMarket = stockMarketService.getStockMarket(currency);
+
 
         //Få sidste tal fra repository +1
         int lastIdNumber = Integer.parseInt(allTransactionLines.getLast().getId()) + 1;
@@ -34,11 +32,11 @@ public class TransactionService implements Service.ITransactionService {
 
         //giver den aktuelle pris og currency
         double priceNow = 0;
-        String currency = null;
-        for (Stock stock : stockMarket){
-            if (ticker.equals(stock.getTicker())){
+        String currencyOfStock = null;
+        for (Stock stock : stockMarket) {
+            if (ticker.equals(stock.getTicker())) {
                 priceNow = stock.getPrice();
-                currency = stock.getCurrency();
+                currencyOfStock = stock.getCurrency();
             }
         }
 
@@ -48,7 +46,7 @@ public class TransactionService implements Service.ITransactionService {
 
 
         TransactionLine transactionLine = new TransactionLine(lineId, userID, timeNow,
-                ticker, priceNow, currency, orderType, quantity);
+                ticker, priceNow, currencyOfStock, orderType, quantity);
 
         transactionRepository.writeTransactionLine(transactionLine);
 
@@ -59,8 +57,8 @@ public class TransactionService implements Service.ITransactionService {
         List<TransactionLine> allTransactionLines = transactionRepository.getTransactions();
         ArrayList<TransactionLine> userTransactionLines = new ArrayList<>();
 
-        for (TransactionLine transactionLine : allTransactionLines){
-            if (userID.equals(transactionLine.getUser_id())){
+        for (TransactionLine transactionLine : allTransactionLines) {
+            if (userID.equals(transactionLine.getUser_id())) {
                 userTransactionLines.add(transactionLine);
             }
         }

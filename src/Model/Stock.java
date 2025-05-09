@@ -5,15 +5,15 @@ import Service.ICurrencyService;
 import java.time.LocalDate;
 
 public class Stock {
-    private String ticker;
-    private String name;
-    private String sector;
+    private final String ticker;
+    private final String name;
+    private final String sector;
     private double price;
     private String currency;
-    private String rating;
-    private double dividendYield;
-    private String market;
-    private LocalDate lastUpdated;
+    private final String rating;
+    private final double dividendYield;
+    private final String market;
+    private final LocalDate lastUpdated;
 
 
     public Stock(String ticker, String name, String sector,

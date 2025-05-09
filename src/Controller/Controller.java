@@ -14,7 +14,7 @@ public class Controller {
     private final TerminalUserInterface terminalUserInterface;
     private final ICurrencyService currencyService;
     private String userID;
-    private String currency = "EUR";
+    private String currency = "DKK";
 
     public Controller(IPortfolioService portfolioService, IStockMarketService stockMarketService,
                       ITransactionService transactionService, IUserService userService, TerminalUserInterface terminalUserInterface, ICurrencyService currencyService) {
@@ -127,7 +127,7 @@ public class Controller {
         String ticker = getTicker();
         int quantity = getQuantity(buy);
         if (portfolioService.canPurchase(userID, ticker, quantity, currency)) {
-            transactionService.createTransactionLine(userID, ticker, buy, quantity);
+            transactionService.createTransactionLine(userID, ticker, buy, quantity, currency);
             terminalUserInterface.printConfirmation(ticker, quantity, bought);
             if (returnToMenu()) {
                 return;
@@ -157,7 +157,7 @@ public class Controller {
             int quantity = getQuantity(sell);
             if (portfolioService.canSell(userID, ticker, quantity, currency)) {
                 transactionService.createTransactionLine(
-                        userID, ticker, sell, quantity);
+                        userID, ticker, sell, quantity, currency);
                 terminalUserInterface.printConfirmation(
                         ticker, quantity, sold);
                 if (returnToMenu()) {

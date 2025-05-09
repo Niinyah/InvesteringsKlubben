@@ -19,18 +19,18 @@ public class UserRepository implements IUserRepository {
 
         try {
             Scanner reader = new Scanner(file);
-            String line = reader.nextLine();
+            String txtLine = reader.nextLine();
             while (reader.hasNextLine()) {
-                line = reader.nextLine();
-                String[] col = line.split(";");
+                txtLine = reader.nextLine();
+                String[] txtLineSplit = txtLine.split(";");
 
-                LocalDate birthDate = LocalDate.parse(col[3], formatter);
-                double initialCashDKK = Double.parseDouble(col[4]);
-                LocalDate createdAt = LocalDate.parse(col[5], formatter);
-                LocalDate lastUpdated = LocalDate.parse(col[6], formatter);
+                LocalDate birthDate = LocalDate.parse(txtLineSplit[3], formatter);
+                double initialCashDKK = Double.parseDouble(txtLineSplit[4]);
+                LocalDate createdAt = LocalDate.parse(txtLineSplit[5], formatter);
+                LocalDate lastUpdated = LocalDate.parse(txtLineSplit[6], formatter);
 
 
-                User user = new User(col[0], col[1], col[2], birthDate, initialCashDKK, createdAt, lastUpdated);
+                User user = new User(txtLineSplit[0], txtLineSplit[1], txtLineSplit[2], birthDate, initialCashDKK, createdAt, lastUpdated);
                 users.add(user);
 
             }

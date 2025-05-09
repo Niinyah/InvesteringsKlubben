@@ -5,14 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Portfolio {
-    private String name;
-    private double balance;
-    private double investmentValue;
-    private double equity;
-    private List<TransactionLine> history;
-    private HashMap<String, Integer> stocks;
-    private List<PortfolioLine> portfolioLines = new ArrayList<>();
-    private Currency currency;
+    private final String name;
+    private final double balance;
+    private final double investmentValue;
+    private final double equity;
+    private final List<TransactionLine> history;
+    private final HashMap<String, Integer> stocks;
+    private final List<PortfolioLine> portfolioLines = new ArrayList<>();
+    private final Currency currency;
 
     public Portfolio(String name, double balance, double investmentValue, double equity, List<TransactionLine> history, HashMap<String, Integer> stocks, Currency currency) {
         this.name = name;

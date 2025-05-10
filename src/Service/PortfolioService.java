@@ -30,46 +30,50 @@ public class PortfolioService implements IPortfolioService {
 
 
     @Override
-    public Portfolio createPortfolio(String userID, String currency)  {
+    public Portfolio createPortfolio(String userID, String selectedCurrency)  {
         List<TransactionLine> userTransactionLines = transactionService.getUserTransactionHistory(userID);
         HashMap<String, Integer> stocks = new HashMap<>();
-        Currency curr = currencyService.getCurrency(currency);
+        double rate = currencyService.getRate(selectedCurrency);
 
         double sold = 0;
         double bought = 0;
 
         for (TransactionLine transactionLine : userTransactionLines) {
             int quantity = 0;
+            //Sætter key og value i hashmappen
             if (stocks.get(transactionLine.getTicker()) != null) {
-
                 quantity = stocks.get(transactionLine.getTicker());
             }
 
-            //Sætter key og value i hashmappen
 
             //lægger sammen hvor meget du har købt og solgt for, og regner prisen ud.
             if (transactionLine.getOrderType().equals("buy")) {
                 stocks.put(transactionLine.getTicker(), quantity + transactionLine.getQuantity());
-                var value = transactionLine.getQuantity() * transactionLine.getPrice();
-                bought += value / curr.getRate();
+
+                double totalPrice = transactionLine.getQuantity() * transactionLine.getPrice();
+                String listedCurrency = transactionLine.getCurrency();
+                double totalConvertedPrice = currencyService.convertCurrency(totalPrice, listedCurrency, selectedCurrency) ;
+                bought += totalConvertedPrice;
+
             } else {
                 stocks.put(transactionLine.getTicker(), quantity - transactionLine.getQuantity());
+
                 var value = transactionLine.getQuantity() * transactionLine.getPrice();
-                sold +=  value / curr.getRate();
+                sold +=  value / rate;
             }
         }
 
         double investmentValue = 0;
-        for (String s : stocks.keySet()) {
-            investmentValue += stockMarketService.getPrice(s, currency) * stocks.get(s);
+        for (String ticker : stocks.keySet()) {
+            investmentValue += stockMarketService.getPrice(ticker, selectedCurrency) * stocks.get(ticker);
         }
-        double balance = (userService.getInitialCash(userID) / curr.getRate()) + sold - bought;
+        double balance = userService.getInitialCash(userID) / rate + sold - bought;
         double equity = balance + investmentValue;
 
-        Portfolio portfolio = new Portfolio(userService.getFullName(userID), balance, investmentValue, equity, userTransactionLines, stocks, curr);
+        Portfolio portfolio = new Portfolio(userService.getFullName(userID), balance, investmentValue, equity, userTransactionLines, stocks, selectedCurrency);
         //Tilføjer aktielinjen til userens portfolio
         for (String s : stocks.keySet()) {
-            double sharePrice = stockMarketService.getPrice(s, currency);
+            double sharePrice = stockMarketService.getPrice(s, selectedCurrency);
             if (stocks.get(s) > 0) {
                 portfolio.setPortfolioLines(new PortfolioLine(s, stocks.get(s), sharePrice));
             }

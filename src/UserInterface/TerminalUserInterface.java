@@ -21,8 +21,8 @@ public class TerminalUserInterface {
                         "|  2 | Buy/Sell Stocks                 |\n" +
                         "|  3 | Portfolio Overview              |\n" +
                         "|  4 | Transaction History             |\n" +
-                        "|  5 | Log Out                         |\n" +
-                        "|  6 | Choose Currency                 |\n" +
+                        "|  5 | Choose Currency                 |\n" +
+                        "|  6 | Log Out                         |\n" +
                         "|  7 | Close Program                   |\n" +
                         "+--------------------------------------+\n" +
                         "Choose an action: "
@@ -48,15 +48,16 @@ public class TerminalUserInterface {
                         "+--------------------------------------+\n" +
                         "|  1 | All Portfolios                  |\n" +
                         "|  2 | Rankings                        |\n" +
-                        "|  3 | Log Out                         |\n" +
-                        "|  4 | Close Program                   |\n" +
+                        "|  3 | Choose Currency                 |\n" +
+                        "|  4 | Log Out                         |\n" +
+                        "|  5 | Close Program                   |\n" +
                         "+--------------------------------------+\n" +
                         "Choose an action: "
         );
         while (true) {
             String input = scanner.nextLine().trim().toLowerCase();
             switch (input) {
-                case "1", "2", "3", "4": {
+                case "1", "2", "3", "4", "5": {
                     return input;
                 }
                 default: {
@@ -101,15 +102,6 @@ public class TerminalUserInterface {
     }
 
 
-    public void howManyMSG(String orderType) {
-        System.out.println("How many would you like to " + orderType + "?");
-    }
-
-    public void chooseCurrencyMSG(){
-        System.out.println("Which currency would you like to be displayed in the program?");
-    }
-
-
     public void insufficientFundsMSG() {
         System.out.println("Insufficient funds");
     }
@@ -122,6 +114,10 @@ public class TerminalUserInterface {
         return scanner.nextLine();
     }
 
+    public int getQuantity(String orderType){
+        System.out.println("How many would you like to " + orderType + "?");
+        return intNumberInput();
+    }
     public int intNumberInput() {
         while (true) {
             int input;
@@ -162,7 +158,7 @@ public class TerminalUserInterface {
         }
     }
 
-    public void printPortfolio(String fullName, double balance, double equity,String currency, double investmentValue, List<PortfolioLine> portfolioLines) {
+    public void printPortfolio(String fullName, double balance, double equity, String currency, double investmentValue, List<PortfolioLine> portfolioLines) {
         final int LINE_WIDTH = 60;
 
         printLine("=", LINE_WIDTH);
@@ -229,9 +225,16 @@ public class TerminalUserInterface {
 
         for (Portfolio portfolio : portfolios) {
             System.out.println();
-            printPortfolio(portfolio.getName(), portfolio.getBalance(), portfolio.getEquity(), portfolio.getCurrency(),portfolio.getInvestmentValue(), portfolio.getPortfolioLines());
+            printPortfolio(portfolio.getName(), portfolio.getBalance(), portfolio.getEquity(), portfolio.getCurrency(), portfolio.getInvestmentValue(), portfolio.getPortfolioLines());
         }
 
+    }
+
+    public void printAllCurrencies(Map<String, Double> rates) {
+        System.out.println("Which of these currencies would you like to be displayed in the program?");
+        for (String valuta : rates.keySet()) {
+            System.out.println(valuta);
+        }
     }
 
     public void printTransactionHistory(List<TransactionLine> transactionLines) {

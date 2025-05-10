@@ -12,9 +12,9 @@ public class Portfolio {
     private final List<TransactionLine> history;
     private final HashMap<String, Integer> stocks;
     private final List<PortfolioLine> portfolioLines = new ArrayList<>();
-    private final Currency currency;
+    private final String currency;
 
-    public Portfolio(String name, double balance, double investmentValue, double equity, List<TransactionLine> history, HashMap<String, Integer> stocks, Currency currency) {
+    public Portfolio(String name, double balance, double investmentValue, double equity, List<TransactionLine> history, HashMap<String, Integer> stocks, String currency) {
         this.name = name;
         this.balance = balance;
         this.investmentValue = investmentValue;
@@ -41,7 +41,7 @@ public class Portfolio {
     }
 
     public String getCurrency(){
-        return currency.getCurrency();
+        return currency;
     }
 
     public List<TransactionLine> getHistory() {

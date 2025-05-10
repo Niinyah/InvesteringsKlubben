@@ -22,7 +22,7 @@ public class TransactionService implements ITransactionService {
     @Override
     public void createTransactionLine(String userID, String ticker, String orderType, int quantity, String currency) {
         List<TransactionLine> allTransactionLines = transactionRepository.getTransactions();
-        List<Stock> stockMarket = stockMarketService.getStockMarket(currency);
+        List<Stock> stockMarket = stockMarketService.getStockMarketInSelectedCurrency(currency);
 
 
         //Få sidste tal fra repository +1

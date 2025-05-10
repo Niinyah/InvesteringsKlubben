@@ -17,7 +17,9 @@ public class Controller {
     private String currency = "DKK";
 
     public Controller(IPortfolioService portfolioService, IStockMarketService stockMarketService,
-                      ITransactionService transactionService, IUserService userService, TerminalUserInterface terminalUserInterface, ICurrencyService currencyService) {
+                      ITransactionService transactionService, IUserService userService,
+                      TerminalUserInterface terminalUserInterface, ICurrencyService currencyService) {
+
         this.portfolioService = portfolioService;
         this.stockMarketService = stockMarketService;
         this.transactionService = transactionService;
@@ -31,7 +33,7 @@ public class Controller {
         String fullName = input;
         while (true) {
             String userID = userService.getUserID(fullName);
-            if (userID != "") {
+            if (userID.isEmpty()) {
                 this.userID = userID;
                 return;
             }
@@ -63,8 +65,8 @@ public class Controller {
                 case "2" -> buyAndSell();
                 case "3" -> showPortfolio();
                 case "4" -> showTransactionHistory();
-                case "5" -> loggedIn = false;
-                case "6" -> chooseCurrency();
+                case "5" -> chooseCurrency();
+                case "6" -> loggedIn = false;
                 case "7" -> {
                     terminalUserInterface.scannerClose();
                     return false;
@@ -81,8 +83,9 @@ public class Controller {
             switch (terminalUserInterface.adminMainMenu()) {
                 case "1" -> showAllPortfolios();
                 case "2" -> rankedPortfolios();
-                case "3" -> loggedIn = false;
-                case "4" -> {
+                case "3" -> chooseCurrency();
+                case "4" -> loggedIn = false;
+                case "5" -> {
                     terminalUserInterface.scannerClose();
                     return false;
                 }
@@ -93,12 +96,12 @@ public class Controller {
     }
 
     public void chooseCurrency() {
-        terminalUserInterface.chooseCurrencyMSG();
+        terminalUserInterface.printAllCurrencies(currencyService.getRates());
         while (true) {
-            String currencyInput = terminalUserInterface.stringInput();
-            String currency = currencyService.getCurrency(currencyInput).getCurrency();
-            if (currencyInput.equalsIgnoreCase(currency)) {
-                this.currency = currency;
+            String userInput = terminalUserInterface.stringInput();
+            boolean currencyIsValid = currencyService.currencyIsValid(userInput);
+            if (currencyIsValid) {
+                this.currency = userInput;
                 return;
             }
             terminalUserInterface.wrongInputMSG();
@@ -106,7 +109,7 @@ public class Controller {
     }
 
     public void showStockMarket() {
-        terminalUserInterface.printStockTable(stockMarketService.getStockMarket(currency));
+        terminalUserInterface.printStockTable(stockMarketService.getStockMarketInSelectedCurrency(currency));
         returnToMenu();
     }
 
@@ -120,12 +123,12 @@ public class Controller {
     }
 
     public void buy() {
-        terminalUserInterface.printStockTable(stockMarketService.getStockMarket(currency));
+        terminalUserInterface.printStockTable(stockMarketService.getStockMarketInSelectedCurrency(currency));
         String buy = "buy";
         String bought = "bought";
         terminalUserInterface.whichStockMSG(buy);
         String ticker = getTicker();
-        int quantity = getQuantity(buy);
+        int quantity = terminalUserInterface.getQuantity(buy);
         if (portfolioService.canPurchase(userID, ticker, quantity, currency)) {
             transactionService.createTransactionLine(userID, ticker, buy, quantity, currency);
             terminalUserInterface.printConfirmation(ticker, quantity, bought);
@@ -154,7 +157,7 @@ public class Controller {
             terminalUserInterface.printUserPortfolioStocks(portfolio.getStocks());
             terminalUserInterface.whichStockMSG(sell);
             String ticker = getTicker();
-            int quantity = getQuantity(sell);
+            int quantity = terminalUserInterface.getQuantity(sell);
             if (portfolioService.canSell(userID, ticker, quantity, currency)) {
                 transactionService.createTransactionLine(
                         userID, ticker, sell, quantity, currency);
@@ -185,7 +188,6 @@ public class Controller {
         returnToMenu();
     }
 
-    // måske ændres
     public String getTicker() {
         boolean tickerDoesNotExists = true;
         String ticker = "";
@@ -193,18 +195,11 @@ public class Controller {
             ticker = terminalUserInterface.stringInput();
             if (stockMarketService.stockDoesNotExists(ticker)) {
                 terminalUserInterface.wrongInputMSG();
-
             }
             tickerDoesNotExists = stockMarketService.stockDoesNotExists(ticker);
 
         }
         return ticker.toUpperCase().trim();
-    }
-
-    public int getQuantity(String orderType) {
-        terminalUserInterface.howManyMSG(orderType);
-        return terminalUserInterface.intNumberInput();
-
     }
 
     public void showPortfolio() {

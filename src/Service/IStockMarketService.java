@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IStockMarketService {
     List<Stock> getStockMarketInSelectedCurrency(String currency);
-    List<Stock> getStockSector();
+    String getStockSector(String ticker);
     double getPrice(String ticker, String currency);
     boolean stockDoesNotExists(String ticker);
 }

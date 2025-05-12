@@ -159,30 +159,30 @@ public class TerminalUserInterface {
     }
 
     public void printPortfolio(String fullName, double balance, double equity, String currency, double investmentValue, List<PortfolioLine> portfolioLines) {
-        final int LINE_WIDTH = 60;
+        final int LINE_WIDTH = 75;
 
         printLine("=", LINE_WIDTH);
         System.out.printf("Portfolio Overview for: %s%n", fullName);
         printLine("=", LINE_WIDTH);
 
-        // Align currency and values to the right with consistent width
         System.out.printf("%-30s %3s %10.2f%n", "Balance:", currency, balance);
         System.out.printf("%-30s %3s %10.2f%n", "Investment Value:", currency, investmentValue);
         System.out.printf("%-30s %3s %10.2f%n", "Equity:", currency, equity);
 
         printLine("-", LINE_WIDTH);
-        System.out.printf("%-10s %-10s %10s %15s%n", "Ticker", "Quantity", "Price", "Value");
+        System.out.printf("%-10s %-10s %13s %13s %20s%n", "Ticker", "Quantity", "Price", "Value", "Sector");
         printLine("-", LINE_WIDTH);
 
         if (portfolioLines.isEmpty()) {
             System.out.println("You currently do not own any stocks.");
         } else {
             for (PortfolioLine line : portfolioLines) {
-                System.out.printf("%-10s %-10d %3s %7.2f %9s %7.2f%n",
+                System.out.printf("%-10s %-10d %3s %9.2f %3s %9.2f %20s%n",
                         line.getTicker(),
                         line.getQuantity(),
                         currency, line.getSharePrice(),
-                        currency, line.getValue());
+                        currency, line.getValue(),
+                        line.getSector());
             }
         }
 

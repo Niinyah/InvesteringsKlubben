@@ -29,11 +29,14 @@ public class StockMarketService implements IStockMarketService {
     }
 
     @Override
-    public List<Stock> getStockSector() {
-        Comparator<Stock> getComparator = new SectorComparator();
+    public String getStockSector(String ticker) {
         List<Stock> stocks = stockMarketRepository.getStockMarket();
-        stocks.sort(getComparator);
-        return stocks;
+        for (Stock s : stocks){
+            if (s.getTicker().equalsIgnoreCase(ticker)){
+                return s.getSector();
+            }
+        }
+        return "";
     }
 
 

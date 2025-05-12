@@ -75,7 +75,8 @@ public class PortfolioService implements IPortfolioService {
         for (String s : stocks.keySet()) {
             double sharePrice = stockMarketService.getPrice(s, selectedCurrency);
             if (stocks.get(s) > 0) {
-                portfolio.setPortfolioLines(new PortfolioLine(s, stocks.get(s), sharePrice));
+                String sector = stockMarketService.getStockSector(s);
+                portfolio.setPortfolioLines(new PortfolioLine(s, stocks.get(s), sharePrice, sector));
             }
         }
         return portfolio;

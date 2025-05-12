@@ -84,8 +84,9 @@ public class Controller {
                 case "1" -> showAllPortfolios();
                 case "2" -> rankedPortfolios();
                 case "3" -> chooseCurrency();
-                case "4" -> loggedIn = false;
-                case "5" -> {
+                case "4" -> addUser();
+                case "5" -> loggedIn = false;
+                case "6" -> {
                     terminalUserInterface.scannerClose();
                     return false;
                 }
@@ -108,10 +109,17 @@ public class Controller {
         }
     }
 
-    public void showStockMarket() {
-        terminalUserInterface.printStockTable(stockMarketService.getStockMarketInSelectedCurrency(currency));
-        returnToMenu();
-    }
+   public void addUser(){
+        terminalUserInterface.whichUserMSG();
+        String fullName = terminalUserInterface.stringInput();
+        terminalUserInterface.howMuchInitialCashMSG();
+        double initialCash = terminalUserInterface.doubleNumberInput();
+        terminalUserInterface.whatIsUserEmailMSG();
+        String email = terminalUserInterface.stringInput();
+        String birthDate = terminalUserInterface.birthDateInput();
+
+        userService.addUser(fullName, initialCash, email, birthDate);
+   }
 
     public void buyAndSell() {
         switch (terminalUserInterface.chooseBuyOrSell()) {
@@ -179,6 +187,11 @@ public class Controller {
     public void showAllPortfolios() {
         terminalUserInterface.printAllPortfolios(
                 portfolioService.adminPortfolios(currency));
+        returnToMenu();
+    }
+
+    public void showStockMarket() {
+        terminalUserInterface.printStockTable(stockMarketService.getStockMarketInSelectedCurrency(currency));
         returnToMenu();
     }
 

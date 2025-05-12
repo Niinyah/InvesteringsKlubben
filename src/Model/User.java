@@ -4,13 +4,13 @@ import java.time.LocalDate;
 
 public class User {
 
-    private String userID;
-    private String fullName;
-    private String email;
-    private LocalDate birthDate;
-    private double initialCashDKK;
-    private LocalDate createdAt;
-    private LocalDate lastUpdated;
+    private final String userID;
+    private final String fullName;
+    private final String email;
+    private final LocalDate birthDate;
+    private final double initialCashDKK;
+    private final LocalDate createdAt;
+    private final LocalDate lastUpdated;
     private String firstName;
     private String lastName;
 

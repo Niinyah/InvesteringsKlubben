@@ -3,14 +3,14 @@ package Model;
 import java.time.LocalDate;
 
 public class TransactionLine {
-    private String id;
-    private String user_id;
-    private String date;
-    private String ticker;
-    private double price;
-    private String currency;
-    private String orderType;
-    private int quantity;
+    private final String id;
+    private final String user_id;
+    private final String date;
+    private final String ticker;
+    private final double price;
+    private final String currency;
+    private final String orderType;
+    private final int quantity;
 
     public TransactionLine(String id, String user_id, String date, String ticker, double price, String currency, String orderType, int quantity) {
         this.id = id;

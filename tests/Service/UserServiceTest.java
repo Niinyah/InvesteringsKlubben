@@ -14,8 +14,8 @@ class UserServiceTest {
     public static void setup() {
         IUserRepository userRepository = new UserRepository();
         userService = new UserService(userRepository);
-
     }
+
     @Test
     void userIDIsEmptyWhenNameIsIncorrect() {
         String id = userService.getUserID("foo");

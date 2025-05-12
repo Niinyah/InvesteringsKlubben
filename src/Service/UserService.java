@@ -11,8 +11,8 @@ public class UserService implements Service.IUserService {
 
     public UserService(IUserRepository userRepository) {
         this.userRepository = userRepository;
-
     }
+
     // metode skal kigge på navn og give userid der hører til.
     @Override
     public String getUserID(String fullName) {

@@ -10,12 +10,14 @@ public class Main {
         ITransactionRepository transactionRepository = new TransactionRepository();
         IStockMarketRepository stockMarketRepository = new StockMarketRepository();
         IUserRepository userRepository = new UserRepository();
-        IStockMarketService stockMarketService = new StockMarketService(stockMarketRepository);
+        ICurrencyRepository currencyRepository = new CurrencyRepository();
+        ICurrencyService currencyService = new CurrencyService(currencyRepository);
+        IStockMarketService stockMarketService = new StockMarketService(stockMarketRepository,currencyService );
         ITransactionService transactionService = new TransactionService(transactionRepository, stockMarketService);
         IUserService userService = new UserService(userRepository);
-        IPortfolioService portfolioService = new PortfolioService(transactionService, stockMarketService, userService);
+        IPortfolioService portfolioService = new PortfolioService(transactionService, stockMarketService, userService, currencyService);
         TerminalUserInterface terminalUserInterface = new TerminalUserInterface();
-        Controller controller = new Controller(portfolioService, stockMarketService, transactionService, userService, terminalUserInterface);
+        Controller controller = new Controller(portfolioService, stockMarketService, transactionService, userService, terminalUserInterface, currencyService);
         controller.start();
 
     }

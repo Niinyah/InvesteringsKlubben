@@ -1,10 +1,10 @@
 package Model;
 
 public class PortfolioLine {
-    private String ticker;
-    private int quantity;
-    private double sharePrice;
-    private double value;
+    private final String ticker;
+    private final int quantity;
+    private final double sharePrice;
+    private final double value;
 
 
     public PortfolioLine(String ticker, int quantity, double sharePrice) {

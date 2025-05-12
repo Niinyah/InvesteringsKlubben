@@ -15,23 +15,23 @@ public class TransactionRepository implements ITransactionRepository {
 
         try {
             Scanner reader = new Scanner(file);
-            String line = reader.nextLine();
+            String txtLine = reader.nextLine();
             while (reader.hasNextLine()){
-                line = reader.nextLine();
-                String[] lines = line.split(";");
+                txtLine = reader.nextLine();
+                String[] txtLineSplit = txtLine.split(";");
 
-
-                String[] col4 = lines[4].split(",");
+                String[] splitOnComma = txtLineSplit[4].split(",");
                 String commaFix;
-                if (col4.length == 2){
-                    commaFix = col4[0] + "." + col4[1];
+                if (splitOnComma.length == 2){
+                    commaFix = splitOnComma[0] + "." + splitOnComma[1];
                 } else {
-                    commaFix = col4[0];
+                    commaFix = splitOnComma[0];
                 }
 
+                TransactionLine transactionLine = new TransactionLine(txtLineSplit[0], txtLineSplit[1],
+                        txtLineSplit[2], txtLineSplit[3], Double.parseDouble(commaFix),
+                        txtLineSplit[5], txtLineSplit[6], Integer.parseInt(txtLineSplit[7]));
 
-                TransactionLine transactionLine = new TransactionLine(lines[0], lines[1], lines[2], lines[3],
-                        Double.parseDouble(commaFix), lines[5], lines[6], Integer.parseInt(lines[7]));
                 transactionLines.add(transactionLine);
             }
             reader.close();
@@ -46,21 +46,12 @@ public class TransactionRepository implements ITransactionRepository {
         try {
             File file = new File("src/Data/transactions.csv");
             FileWriter outFile = new FileWriter(file, true);
-            //String split = ";";
+
             outFile.write("\n" +line.getId() + ";" + line.getUser_id() + ";" +
                     line.getDate() + ";" + line.getTicker() + ";" + line.getPrice()
                     + ";" + line.getCurrency() + ";" + line.getOrderType() + ";" + line.getQuantity());
             outFile.close();
-            /*
-        Path path = Paths.get("transactions.csv");
-            try {BufferedWriter writer = Files.newBufferedWriter(
-                                            path, StandardOpenOption.APPEND);
-                writer.write(line.getId() + ";" + line.getUser_id() + ";" +
-                line.getDate() + ";" + line.getTicker() + ";" + line.getPrice()
-                + ";" + line.getCurrency() + ";" + line.getOrderType() + ";" + line.getOrderType());
 
-
-             */
         } catch (IOException e) {
             System.out.println("File not found");
         }

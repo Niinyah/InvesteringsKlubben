@@ -33,7 +33,7 @@ public class Controller {
         String fullName = input;
         while (true) {
             String userID = userService.getUserID(fullName);
-            if (userID.isEmpty()) {
+            if (!userID.isEmpty()) {
                 this.userID = userID;
                 return;
             }

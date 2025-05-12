@@ -24,7 +24,6 @@ public class StockMarketService implements IStockMarketService {
             double price =  getPrice(stock.getTicker(), userSelectedCurrency);
             stock.setPrice(price);
             stock.setCurrency(userSelectedCurrency);
-
         }
         return stocks;
     }

@@ -20,27 +20,12 @@ public class StockMarketService implements IStockMarketService {
     @Override
     public List<Stock> getStockMarketInSelectedCurrency(String userSelectedCurrency) {
         List<Stock> stocks = stockMarketRepository.getStockMarket();
-
         for (Stock stock : stocks) {
             double price =  getPrice(stock.getTicker(), userSelectedCurrency);
             stock.setPrice(price);
             stock.setCurrency(userSelectedCurrency);
-//            if (!s.getCurrency().equalsIgnoreCase(currency)) {
-//                Currency c = currencyService.getCurrency(currency);
-//                if (s.getCurrency().equalsIgnoreCase("DKK")) {
-//                    s.setPrice(s.getPrice() / c.getRate());
-//                } else {
-//                    Currency stock = currencyService.getCurrency(s.getCurrency());
-//                    var rate = stock.getRate();
-//                    var pris = currencyService.getPriceInDKK(s);
-//                    var price = pris / rate;
-//                    s.setPrice(price);
-//                }
-//                s.setCurrency(currency);
-//            }
 
         }
-
         return stocks;
     }
 
@@ -69,6 +54,7 @@ public class StockMarketService implements IStockMarketService {
         return null;
     }
 
+    @Override
     public boolean stockDoesNotExists(String ticker) {
         List<Stock> stocks = stockMarketRepository.getStockMarket();
         for (Stock stock : stocks) {

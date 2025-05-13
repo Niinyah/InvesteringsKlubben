@@ -201,18 +201,18 @@ public class TerminalUserInterface {
         System.out.printf("%-30s %3s %10.2f%n", "Equity:", currency, equity);
 
         printLine("-", LINE_WIDTH);
-        System.out.printf("%-10s %-10s %13s %13s %20s%n", "Ticker", "Quantity", "Price", "Value", "Sector");
+        System.out.printf("%-10s %-10s %11s %11s %20s%n", "Ticker", "Quantity", "Price", "Value", "Sector");
         printLine("-", LINE_WIDTH);
 
         if (portfolioLines.isEmpty()) {
             System.out.println("You currently do not own any stocks.");
         } else {
             for (PortfolioLine line : portfolioLines) {
-                System.out.printf("%-10s %-10d %3s %9.2f %3s %9.2f %20s%n",
+                System.out.printf("%-10s %-10d %1s %9.2f  %9.2f %20s%n",
                         line.getTicker(),
                         line.getQuantity(),
                         currency, line.getSharePrice(),
-                        currency, line.getValue(),
+                        line.getValue(),
                         line.getSector());
             }
         }

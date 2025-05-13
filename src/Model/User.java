@@ -11,8 +11,8 @@ public class User {
     private final double initialCashDKK;
     private final LocalDate createdAt;
     private final LocalDate lastUpdated;
-    private String firstName;
-    private String lastName;
+
+
 
     public User(String userID, String fullName, String email, LocalDate birthDate, double initialCashDKK, LocalDate createdAt, LocalDate lastUpdated) {
         this.userID = userID;
@@ -22,7 +22,6 @@ public class User {
         this.initialCashDKK = initialCashDKK;
         this.createdAt = createdAt;
         this.lastUpdated = lastUpdated;
-        splitName();
     }
 
     public String getUserID() {
@@ -51,12 +50,6 @@ public class User {
 
     public LocalDate getLastUpdated() {
         return lastUpdated;
-    }
-
-    public void splitName() {
-        String[] split = fullName.split(" ");
-        this.firstName = split[0];
-        this.lastName = split[1];
     }
 
     public String toString(){

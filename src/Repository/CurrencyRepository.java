@@ -1,11 +1,10 @@
 package Repository;
 
-import Model.Currency;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 public class CurrencyRepository implements ICurrencyRepository{
     @Override
@@ -15,19 +14,19 @@ public class CurrencyRepository implements ICurrencyRepository{
 
         try {
             Scanner reader = new Scanner(file);
-            String line = reader.nextLine();
+            String txtline = reader.nextLine();
             while (reader.hasNextLine()) {
-                line = reader.nextLine();
-                String lines[] = line.split(";");
-                String[] line2 = lines[2].split(",");
-                String tal;
-                if (line2.length == 2) {
-                    tal = line2[0] + "." + line2[1];
+                txtline = reader.nextLine();
+                String[] splitOnComma = txtline.split(";");
+                String[] commaFixForPrice = splitOnComma[2].split(",");
+                String priceString;
+                if (commaFixForPrice.length == 2) {
+                    priceString = commaFixForPrice[0] + "." + commaFixForPrice[1];
                 } else {
-                    tal = line2[0];
+                    priceString = commaFixForPrice[0];
                 }
 
-                exchangeRate.put(lines[0], Double.parseDouble(tal));
+                exchangeRate.put(splitOnComma[0], Double.parseDouble(priceString));
 
             }
             reader.close();

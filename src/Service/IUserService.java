@@ -8,4 +8,5 @@ public interface IUserService {
     String getFullName(String userID);
     double getInitialCash(String userID);
     List<String> getAllUserIDs();
+    void addUser(String fullName, double initialCash, String email, String birthDayInString);
 }

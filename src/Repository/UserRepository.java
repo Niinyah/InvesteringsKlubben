@@ -1,9 +1,12 @@
 package Repository;
 
+import Model.TransactionLine;
 import Model.User;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -41,6 +44,36 @@ public class UserRepository implements IUserRepository {
         }
         return users;
     }
+
+    @Override
+    public void writeUserToCsv(User user) {
+            try {
+                File file = new File("src/Data/users.csv");
+                FileWriter outFile = new FileWriter(file, true);
+                DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("dd");
+                DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MM");
+
+                String birthDate = user.getBirthDate().format(dayFormatter) + "-" +
+                        user.getBirthDate().format(monthFormatter) + "-" + user.getBirthDate().getYear();
+                String createdAt = user.getCreatedAt().format(dayFormatter) + "-" +
+                        user.getCreatedAt().format(monthFormatter) + "-" + user.getCreatedAt().getYear();
+                String lastUpdated = user.getLastUpdated().format(dayFormatter) + "-" +
+                        user.getLastUpdated().format(monthFormatter) + "-" + user.getLastUpdated().getYear();
+
+                outFile.write(
+                        "\n" +user.getUserID() + ";" + user.getFullName() +
+                                ";" + user.getEmail() + ";" + birthDate +
+                                ";" + user.getInitialCashDKK() + ";" + createdAt +
+                                ";" + lastUpdated
+                );
+                outFile.close();
+
+            } catch (IOException e) {
+                System.out.println("File not found");
+            }
+
+        }
+
 
 
 }

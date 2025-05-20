@@ -1,11 +1,8 @@
 package Service;
 
-import Comparators.SectorComparator;
-import Model.Currency;
 import Model.Stock;
 import Repository.IStockMarketRepository;
 
-import java.util.Comparator;
 import java.util.List;
 
 public class StockMarketService implements IStockMarketService {

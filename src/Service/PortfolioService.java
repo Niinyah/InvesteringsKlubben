@@ -1,10 +1,9 @@
 package Service;
 
 import Comparators.InvestmentComparator;
-import Comparators.SectorComparator;
-import Exceptions.UserIDException;
-import Model.*;
-import Repository.ICurrencyRepository;
+import Model.Portfolio;
+import Model.PortfolioLine;
+import Model.TransactionLine;
 
 import java.util.ArrayList;
 import java.util.Comparator;

@@ -3,6 +3,8 @@ package Service;
 import Model.User;
 import Repository.IUserRepository;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,5 +60,20 @@ public class UserService implements Service.IUserService {
             userIDs.add(user.getUserID());
         }
         return userIDs;
+    }
+
+    public void addUser(String fullName, double initialCash, String email, String birthDateInString){
+        List<User> users = userRepository.getUsers();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String userIDFromLastUser = users.getLast().getUserID();
+        int userID = Integer.parseInt(userIDFromLastUser) + 1;
+        String lastUserID = userID + "";
+
+        LocalDate birthDate = LocalDate.parse(birthDateInString, formatter);
+        LocalDate createdAt = LocalDate.now();
+        LocalDate lastUpdated = LocalDate.now();
+
+        User user = new User(lastUserID, fullName, email, birthDate, initialCash, createdAt, lastUpdated);
+        userRepository.writeUserToCsv(user);
     }
 }

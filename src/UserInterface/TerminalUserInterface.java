@@ -5,6 +5,8 @@ import Model.PortfolioLine;
 import Model.Stock;
 import Model.TransactionLine;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -49,15 +51,16 @@ public class TerminalUserInterface {
                         "|  1 | All Portfolios                  |\n" +
                         "|  2 | Rankings                        |\n" +
                         "|  3 | Choose Currency                 |\n" +
-                        "|  4 | Log Out                         |\n" +
-                        "|  5 | Close Program                   |\n" +
+                        "|  4 | Add User                        |\n" +
+                        "|  5 | Log Out                         |\n" +
+                        "|  6 | Close Program                   |\n" +
                         "+--------------------------------------+\n" +
                         "Choose an action: "
         );
         while (true) {
             String input = scanner.nextLine().trim().toLowerCase();
             switch (input) {
-                case "1", "2", "3", "4", "5": {
+                case "1", "2", "3", "4", "5", "6": {
                     return input;
                 }
                 default: {
@@ -101,6 +104,18 @@ public class TerminalUserInterface {
         System.out.println("Write the ticker you would like to " + orderType + "?");
     }
 
+    public void whichUserMSG() {
+        System.out.println("What is the name of the user you would like to add?");
+    }
+
+    public void howMuchInitialCashMSG() {
+        System.out.println("How much initial cash should the user start with?");
+    }
+
+    public void whatIsUserEmailMSG() {
+        System.out.println("What is their email?");
+    }
+
 
     public void insufficientFundsMSG() {
         System.out.println("Insufficient funds");
@@ -110,14 +125,30 @@ public class TerminalUserInterface {
         System.out.println("You do not own " + quantity + " shares of " + ticker + " ;-(");
     }
 
+    public String birthDateInput() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String birthdate;
+        while (true) {
+            System.out.println("write your birthdate like this (dd-MM-yyyy)");
+            try {
+                birthdate = stringInput();
+                LocalDate.parse(birthdate, formatter);
+                return birthdate;
+            } catch (Exception e) {
+                wrongInputMSG();
+            }
+        }
+    }
+
     public String stringInput() {
         return scanner.nextLine();
     }
 
-    public int getQuantity(String orderType){
+    public int getQuantity(String orderType) {
         System.out.println("How many would you like to " + orderType + "?");
         return intNumberInput();
     }
+
     public int intNumberInput() {
         while (true) {
             int input;
@@ -170,18 +201,18 @@ public class TerminalUserInterface {
         System.out.printf("%-30s %3s %10.2f%n", "Equity:", currency, equity);
 
         printLine("-", LINE_WIDTH);
-        System.out.printf("%-10s %-10s %13s %13s %20s%n", "Ticker", "Quantity", "Price", "Value", "Sector");
+        System.out.printf("%-10s %-10s %11s %11s %20s%n", "Ticker", "Quantity", "Price", "Value", "Sector");
         printLine("-", LINE_WIDTH);
 
         if (portfolioLines.isEmpty()) {
             System.out.println("You currently do not own any stocks.");
         } else {
             for (PortfolioLine line : portfolioLines) {
-                System.out.printf("%-10s %-10d %3s %9.2f %3s %9.2f %20s%n",
+                System.out.printf("%-10s %-10d %1s %9.2f  %9.2f %20s%n",
                         line.getTicker(),
                         line.getQuantity(),
                         currency, line.getSharePrice(),
-                        currency, line.getValue(),
+                        line.getValue(),
                         line.getSector());
             }
         }

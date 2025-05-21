@@ -140,6 +140,14 @@ public class TerminalUserInterface {
         }
     }
 
+    public void wrongBirthdayMSG(){
+        System.out.println("invalid birth year have to be 18 or older or under 110");
+    }
+
+    public void negativeNumberMSG(){
+        System.out.println("Cannot be negative number");
+    }
+
     public String stringInput() {
         return scanner.nextLine();
     }

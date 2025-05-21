@@ -4,6 +4,7 @@ import Model.Portfolio;
 import Service.*;
 import UserInterface.TerminalUserInterface;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 
 public class Controller {
@@ -29,13 +30,16 @@ public class Controller {
 
     }
 
-    public void nameVerifier(String input) {
+    public boolean nameVerifier(String input) {
         String fullName = input;
         while (true) {
-            String userID = userService.getUserID(fullName);
+            if (fullName.equals("Admin")){
+                return true;
+            }
+                String userID = userService.getUserID(fullName);
             if (!userID.isEmpty()) {
                 this.userID = userID;
-                return;
+                return false;
             }
             terminalUserInterface.wrongInputMSG();
             fullName = terminalUserInterface.stringInput();
@@ -47,17 +51,16 @@ public class Controller {
         while (running) {
             terminalUserInterface.loggingInMSG();
             String input = terminalUserInterface.stringInput();
-            if (input.equals("Admin")) {
+            if (nameVerifier(input)) {
                 running = adminLogIn();
             } else {
-                running = userLogIn(input);
+                running = userLogIn();
             }
         }
 
     }
 
-    public boolean userLogIn(String input) {
-        nameVerifier(input);
+    public boolean userLogIn() {
         boolean loggedIn = true;
         while (loggedIn) {
             switch (terminalUserInterface.mainMenu()) {
@@ -109,17 +112,39 @@ public class Controller {
         }
     }
 
-   public void addUser(){
+    public void addUser() {
         terminalUserInterface.whichUserMSG();
         String fullName = terminalUserInterface.stringInput();
         terminalUserInterface.howMuchInitialCashMSG();
-        double initialCash = terminalUserInterface.doubleNumberInput();
+        double initialCash = 0;
+        boolean inValidInitialCash = true;
+        while (inValidInitialCash) {
+            initialCash = terminalUserInterface.doubleNumberInput();
+            if (initialCash > 0) {
+                inValidInitialCash = false;
+                continue;
+            }
+            terminalUserInterface.negativeNumberMSG();
+        }
         terminalUserInterface.whatIsUserEmailMSG();
         String email = terminalUserInterface.stringInput();
-        String birthDate = terminalUserInterface.birthDateInput();
+        String birthDate = "";
+        boolean inValidYear = true;
+        while (inValidYear) {
+            birthDate = terminalUserInterface.birthDateInput();
+            String[] split = birthDate.split("-");
+            int year = Integer.parseInt(split[2]);
+            int year18 = LocalDate.now().getYear() - 18;
+            int year110 = LocalDate.now().getYear() - 110;
+            if (year < year18 && year > year110) {
+                inValidYear = false;
+                continue;
+            }
+            terminalUserInterface.wrongBirthdayMSG();
+        }
 
         userService.addUser(fullName, initialCash, email, birthDate);
-   }
+    }
 
     public void buyAndSell() {
         switch (terminalUserInterface.chooseBuyOrSell()) {

@@ -19,7 +19,6 @@ public class Main {
         TerminalUserInterface terminalUserInterface = new TerminalUserInterface();
         Controller controller = new Controller(portfolioService, stockMarketService, transactionService, userService, terminalUserInterface, currencyService);
         controller.start();
-
     }
 }
 

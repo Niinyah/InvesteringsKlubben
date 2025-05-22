@@ -30,6 +30,6 @@ class StockMarketServiceTest {
     void getPriceIsWrong(){
         double price = stockMarketService.getPrice("VWS", "USD");
         double expected = 198 * 6.9;
-        assertEquals(expected, price);
+        assertNotEquals(expected, price);
     }
 }

@@ -1,10 +1,9 @@
 package Service;
 
 import Comparators.InvestmentComparator;
-import Comparators.SectorComparator;
-import Exceptions.UserIDException;
-import Model.*;
-import Repository.ICurrencyRepository;
+import Model.Portfolio;
+import Model.PortfolioLine;
+import Model.TransactionLine;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -45,21 +44,17 @@ public class PortfolioService implements IPortfolioService {
                 quantity = stocks.get(transactionLine.getTicker());
             }
 
+            double totalPrice = transactionLine.getQuantity() * transactionLine.getPrice();
+            String listedCurrency = transactionLine.getCurrency();
+            double totalConvertedPrice = currencyService.convertCurrency(totalPrice, listedCurrency, selectedCurrency);
 
             //lægger sammen hvor meget du har købt og solgt for, og regner prisen ud.
             if (transactionLine.getOrderType().equals("buy")) {
                 stocks.put(transactionLine.getTicker(), quantity + transactionLine.getQuantity());
-
-                double totalPrice = transactionLine.getQuantity() * transactionLine.getPrice();
-                String listedCurrency = transactionLine.getCurrency();
-                double totalConvertedPrice = currencyService.convertCurrency(totalPrice, listedCurrency, selectedCurrency) ;
                 bought += totalConvertedPrice;
-
             } else {
                 stocks.put(transactionLine.getTicker(), quantity - transactionLine.getQuantity());
-
-                var value = transactionLine.getQuantity() * transactionLine.getPrice();
-                sold +=  value / rate;
+                sold +=  totalConvertedPrice;
             }
         }
 
